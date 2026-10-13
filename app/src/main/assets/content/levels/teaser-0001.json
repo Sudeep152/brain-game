@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "teaser-0001",
+  "family": "teaser",
+  "runtime": "native-v1",
+  "minAppVersion": 1,
+  "difficulty": 1,
+  "languageDependent": false,
+  "locales": ["en", "hi"],
+  "text": { "prompt": "lvl.teaser-0001.prompt" },
+  "hints": [
+    { "textKey": "lvl.teaser-0001.h1" },
+    { "textKey": "lvl.teaser-0001.h2", "highlight": "n-12" },
+    { "textKey": "lvl.teaser-0001.h3", "showSolution": true }
+  ],
+  "scene": {
+    "width": 1000,
+    "height": 1600,
+    "background": "bg.paper",
+    "objects": [
+      { "id": "n-9", "kind": "text", "text": "9", "x": 250, "y": 800, "w": 160, "h": 160, "tappable": true },
+      { "id": "n-12", "kind": "text", "text": "12", "x": 750, "y": 800, "w": 160, "h": 160, "tappable": true }
+    ]
+  },
+  "rules": [
+    {
+      "id": "wrong-nine",
+      "on": { "type": "tap", "target": "n-9" },
+      "do": [
+        { "type": "feedback", "kind": "nope" },
+        { "type": "haptic", "id": "light" }
+      ]
+    },
+    {
+      "id": "win-twelve",
+      "on": { "type": "tap", "target": "n-12" },
+      "do": [
+        { "type": "haptic", "id": "success" },
+        { "type": "win" }
+      ],
+      "once": true
+    }
+  ],
+  "solution": [
+    { "type": "tap", "target": "n-12" }
+  ],
+  "meta": { "author": "codex", "tags": ["numbers"], "createdAt": "2026-10-14" }
+}

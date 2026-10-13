@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "combine-0001",
+  "family": "combine",
+  "runtime": "native-v1",
+  "minAppVersion": 1,
+  "difficulty": 1,
+  "languageDependent": false,
+  "locales": ["en", "hi"],
+  "text": { "prompt": "lvl.combine-0001.prompt" },
+  "hints": [
+    { "textKey": "lvl.combine-0001.h1" },
+    { "textKey": "lvl.combine-0001.h2", "highlight": "fire" },
+    { "textKey": "lvl.combine-0001.h3", "showSolution": true }
+  ],
+  "state": { "melted": false },
+  "scene": {
+    "width": 1000,
+    "height": 1600,
+    "background": "bg.paper",
+    "objects": [
+      { "id": "ice", "kind": "sprite", "asset": "obj.ice", "x": 500, "y": 900, "w": 220, "h": 220 },
+      { "id": "fire", "kind": "sprite", "asset": "obj.fire", "x": 500, "y": 1350, "w": 160, "h": 160, "draggable": true, "snapBack": true },
+      { "id": "water", "kind": "sprite", "asset": "obj.water", "x": 500, "y": 900, "w": 220, "h": 220, "visible": false }
+    ]
+  },
+  "rules": [
+    {
+      "id": "melt",
+      "on": { "type": "dragEnd", "target": "fire", "dropOn": "ice" },
+      "do": [
+        { "type": "hide", "target": "ice" },
+        { "type": "show", "target": "water" },
+        { "type": "setState", "key": "melted", "value": true },
+        { "type": "sound", "id": "sfx.pop" }
+      ]
+    },
+    {
+      "id": "miss",
+      "on": { "type": "dragEnd", "target": "fire", "dropOn": "none" },
+      "do": [
+        { "type": "feedback", "kind": "nope" }
+      ]
+    }
+  ],
+  "win": { "type": "stateEquals", "key": "melted", "value": true },
+  "solution": [
+    { "type": "drag", "target": "fire", "toObject": "ice" }
+  ],
+  "meta": { "author": "codex", "tags": ["combine"], "createdAt": "2026-10-14" }
+}

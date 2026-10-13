@@ -17,6 +17,19 @@ NEXT ACTION:
 ```
 
 ---
+TASK ID: T-302
+CURRENT OWNER: Codex
+NEXT OWNER: Claude (schema clarification), then Codex resumes
+OBJECTIVE: Implement the pure Kotlin puzzle schema, validator, reducer/rules engine, replay, samples, and tests.
+CURRENT STATUS: BLOCKED before source implementation; T-301 is complete and committed as d2e7690 on task/T-301-project-skeleton.
+FILES MODIFIED: management/TASKS.md, management/HANDOFFS.md (blocker record only on task/T-302-puzzle-core)
+DECISIONS MADE: None; Codex intentionally did not invent missing schema behavior.
+TESTS RUN: T-301 acceptance passed (`:app:assembleDebug`, `:puzzle-core:test`); no T-302 source exists yet.
+KNOWN ISSUES: Rule-condition field/encoding unspecified; Architecture vs Schema event whitelist conflicts; matchstick models-only scope conflicts with validator solver requirement; validator asset/text catalog contract unspecified.
+REMAINING WORK: Claude resolves these schema contracts; Codex implements T-302 and its full tests afterward.
+NEXT ACTION: Claude updates/clarifies docs/tech/LEVEL_SCHEMA.md and, if needed, docs/tech/ARCHITECTURE.md; owner sends the answer back to Codex.
+
+---
 TASK ID: T-201 → T-301, T-302
 CURRENT OWNER: Claude
 NEXT OWNER: Codex

@@ -107,8 +107,9 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - LIMIT: `adb devices -l` found no attached device/emulator, so launch-to-Home was not run.
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301
+- ASSIGNED TO: Codex · STATUS: BLOCKED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301
 - DESCRIPTION: Implement docs/tech/LEVEL_SCHEMA.md in `:puzzle-core`: kotlinx.serialization models; `LevelValidator` (checklist §8, except touch-target size); `PuzzleSession` pure reducer with state machine (ARCHITECTURE §2), generic rules engine (events/conditions/actions §3–4); solution replay. Matchstick/oddoneout params: models only (logic comes later). Add 2 sample levels (teaser + combine) + en/hi strings under `app/src/main/assets/content/` and a test that loads every level in that folder, validates it and replays its solution to COMPLETED.
 - FILES OWNED: puzzle-core/src/**, app/src/main/assets/content/**
 - ACCEPTANCE: unit tests for reducer transitions, each event/condition/action type, validator failures, and sample-level replay — all passing (real output). If the schema has a gap or contradiction, don't invent: note it and message Claude.
 - REVIEWER: Claude
+- BLOCKER (Codex, 2026-10-14): `LEVEL_SCHEMA.md` does not define the JSON field/name or one canonical encoding for rule conditions (the condition list uses `stateEquals {…}`, while actions/events use a `type` discriminator and `win` uses keyed objects). `ARCHITECTURE.md` adds `dragStart`, `dragMove`, and `hintRequested`, but the schema event whitelist omits them. The validator requires matchstick levels to have ≥1 solution, while T-302 explicitly limits matchstick to models only and defers logic. Asset/text-reference validation also needs an explicit validation context/catalog contract. Awaiting Claude's schema clarification; no puzzle-core source was invented.

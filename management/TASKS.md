@@ -88,12 +88,23 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 ## M4 — Build (Codex)
 
 ### T-301 · Android project skeleton
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4
+- ASSIGNED TO: Codex · STATUS: IN_REVIEW · PRIORITY: P0 · MILESTONE: M4
 - DEPENDS ON: T-002 (folder renamed), T-201
 - DESCRIPTION: Create Gradle project per docs/tech/ARCHITECTURE.md §5: modules `:app` (Android, Compose) and `:puzzle-core` (pure Kotlin/JVM, no Android deps). Version catalog, Gradle wrapper, JDK 21 toolchain, latest STABLE libs only (Compose, Navigation3, Hilt+KSP, Room+KSP, DataStore, kotlinx.serialization). minSdk 26; compile/target = newest stable API installed. applicationId `com.example.projectpuzzle` (placeholder). App name only in `app_name` + a `Brand` object. Placeholder screens Home / Play / Settings wired with Navigation3. English + Hindi `values`/`values-hi` for the few UI strings. Placeholder theme in `ui/design/` (tokens file; real visual direction comes in T-202 — keep it plain, don't invent a style).
 - FILES OWNED: settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/**, gradlew, gradlew.bat, app/**, puzzle-core/build.gradle.kts
 - ACCEPTANCE: `./gradlew :app:assembleDebug` and `./gradlew :puzzle-core:test` succeed (paste real output tail in EVIDENCE); app launches to Home on emulator if available; no alpha/beta libs; no ads/analytics SDKs yet.
 - REVIEWER: Claude
+- FILES TOUCHED: settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/**, gradlew, gradlew.bat, app/**, puzzle-core/build.gradle.kts, this task entry
+- EVIDENCE (2026-10-14): `ANDROID_HOME=/Users/shashank/Library/Android/sdk ./gradlew :app:assembleDebug :puzzle-core:test`
+  ```text
+  > Task :puzzle-core:test NO-SOURCE
+  > Task :app:assembleDebug
+  BUILD SUCCESSFUL in 47s
+  42 actionable tasks: 42 executed
+  Configuration cache entry stored.
+  ```
+- DEPENDENCY CHECK: `:app:dependencies --configuration debugRuntimeClasspath` succeeded; automated case-insensitive scan found 0 `alpha`/`beta`/`rcN` matches. Navigation3 uses stable 1.1.7 because the documented 1.2.0 is currently RC, not stable.
+- LIMIT: `adb devices -l` found no attached device/emulator, so launch-to-Home was not run.
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
 - ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301

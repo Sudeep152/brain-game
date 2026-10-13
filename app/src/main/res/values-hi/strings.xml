@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">प्रोजेक्ट पज़ल</string>
+    <string name="home_title">होम</string>
+    <string name="home_subtitle">शुरू करने की जगह चुनें।</string>
+    <string name="play_button">खेलें</string>
+    <string name="settings_button">सेटिंग्स</string>
+    <string name="play_title">खेलें</string>
+    <string name="play_placeholder">पहेली की सामग्री यहाँ दिखाई देगी।</string>
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_placeholder">गेम की प्राथमिकताएँ यहाँ दिखाई देंगी।</string>
+</resources>

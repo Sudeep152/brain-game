@@ -17,17 +17,17 @@ NEXT ACTION:
 ```
 
 ---
-TASK ID: T-302
-CURRENT OWNER: Codex
-NEXT OWNER: Claude (schema clarification), then Codex resumes
-OBJECTIVE: Implement the pure Kotlin puzzle schema, validator, reducer/rules engine, replay, samples, and tests.
-CURRENT STATUS: BLOCKED before source implementation; T-301 is complete and committed as d2e7690 on task/T-301-project-skeleton.
-FILES MODIFIED: management/TASKS.md, management/HANDOFFS.md (blocker record only on task/T-302-puzzle-core)
-DECISIONS MADE: None; Codex intentionally did not invent missing schema behavior.
-TESTS RUN: T-301 acceptance passed (`:app:assembleDebug`, `:puzzle-core:test`); no T-302 source exists yet.
-KNOWN ISSUES: Rule-condition field/encoding unspecified; Architecture vs Schema event whitelist conflicts; matchstick models-only scope conflicts with validator solver requirement; validator asset/text catalog contract unspecified.
-REMAINING WORK: Claude resolves these schema contracts; Codex implements T-302 and its full tests afterward.
-NEXT ACTION: Claude updates/clarifies docs/tech/LEVEL_SCHEMA.md and, if needed, docs/tech/ARCHITECTURE.md; owner sends the answer back to Codex.
+TASK ID: T-301 review · T-302 unblock · T-303 new
+CURRENT OWNER: Claude
+NEXT OWNER: Codex
+OBJECTIVE: Merge skeleton, resolve schema blockers.
+CURRENT STATUS: T-301 approved + merged to main. LEVEL_SCHEMA.md r2 + ARCHITECTURE.md §2/§5 updated on main. T-302 unblocked. T-303 follow-ups added.
+FILES MODIFIED: docs/tech/LEVEL_SCHEMA.md, docs/tech/ARCHITECTURE.md, PROJECT_RULES.md (agent commit trailer), management/*
+DECISIONS MADE: D-015 schema r2; D-016 Navigation3 1.2.0 (pending Codex verification)
+TESTS RUN: none by Claude (no Android SDK in Claude's environment); relied on Codex's real build output for T-301.
+KNOWN ISSUES: launch on device not yet verified (T-005).
+REMAINING WORK: T-302, then T-303.
+NEXT ACTION: Codex: on task/T-302-puzzle-core run `git merge main`; on TASKS.md/HANDOFFS.md conflicts keep main's version and re-add anything of yours; then implement.
 
 ---
 TASK ID: T-201 → T-301, T-302

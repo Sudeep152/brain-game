@@ -39,8 +39,14 @@ Role cards for specialist hats (research, game design, Android, QA, …): `agent
 ## 6. Working together without stepping on each other
 - One task = one owner. Claim a task (set status `IN_PROGRESS` + your name) **before** editing.
 - Only edit files listed under your task's `FILES OWNED`. Need another file? Note it in the task and ask.
-- **Until Git is set up (owner will do it): only ONE tool edits the folder at a time.** No parallel editing.
-- After Git exists: one branch per task (`task/T-xxx-short-name`), small commits, never force-push/reset/delete others' work.
+- Repo: local folder `brain-game` + GitHub `Sudeep152/brain-game` (private). `main` must always build and pass tests.
+- **Code work = one branch per task:** `task/T-xxx-short-name` from latest `main`. Small commits with clear messages (`T-301: add Gradle skeleton`).
+- When done: set task `IN_REVIEW`; Claude reviews the branch; after review it's merged into `main` (owner can veto). Owner pushes to GitHub (or the agent pushes if it has access).
+- Docs/management-only updates by Claude may be committed directly on `main` if no code files are touched.
+- Before starting: `git status` must be clean and you must be on the right branch. Never commit on someone else's task branch.
+- Never force-push, rebase shared branches, reset, or delete others' work. Never commit secrets.
+- Every agent commit says who made it: message starts with the task id, and ends with a trailer line `Agent: Codex` / `Agent: Claude` / `Agent: <name>` (commits may use the owner's git identity).
+- Two agents may work at the same time only on different branches with non-overlapping `FILES OWNED`.
 - Never overwrite or "clean up" the owner's code without asking.
 
 ## 7. Approval gates (owner must say yes first)

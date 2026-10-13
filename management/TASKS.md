@@ -75,8 +75,9 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - EVIDENCE: written 2026-10-14; reviewer: Owner (Codex may raise issues while implementing T-302)
 
 ### T-202 · Three visual directions → owner picks one
-- ASSIGNED TO: Claude (UI/UX hat) · STATUS: READY · DEPENDS ON: T-104 approval · MILESTONE: M3
+- ASSIGNED TO: Claude (UI/UX hat) · STATUS: IN_REVIEW · DEPENDS ON: T-104 approval · MILESTONE: M3
 - FILES OWNED: docs/design/VISUAL_DIRECTIONS.md (+ mockups)
+- EVIDENCE: 3 directions × 3 screens on canvas https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn; comparison + recommendation (B Toybox) in docs/design/VISUAL_DIRECTIONS.md. REVIEWER: Owner (approval gate).
 
 ### T-203 · Play Console account + 12 closed testers lined up
 - ASSIGNED TO: OWNER · STATUS: BACKLOG · MILESTONE: M3

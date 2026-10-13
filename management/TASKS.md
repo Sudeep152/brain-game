@@ -162,3 +162,14 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 
 ### T-305 · Matchstick family: solver, generator, ≥1-solution validation
 - ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302
+
+### T-309 · Doodle Kit visuals — full component library (design)
+- ASSIGNED TO: Claude · STATUS: IN_REVIEW · REVIEWER: Owner (approval gate: visual)
+- EVIDENCE: canvas https://claude.ai/artifact/U17w2oyqASxLS6bPJryut1 — 4 pages: Foundations (colors+type EN/HI; space, shape, 20 icons, motion), Components (buttons, cards/bars/status, inputs/controls incl. text field, switch, segmented, checkbox/radio, quiz answer options, code input; feedback/overlays incl. hint sheet, dialog, rewarded prompt, banner/loader/empty/error), Game pieces (shape primitives, 8 objects, 7 interaction states, tokens, matchstick, odd-one-out tile; 8 device cues + sensor fallback + sound cues + camera/mic primer marked LATER; celebration), Screens (level map, solved, hint sheet, settings, daily+share card, first launch, offline video state, Doodle Kit app home).
+- NEXT: owner approves/edits → Claude writes the final widget + component list with states (docs/design/COMPONENTS.md) → Codex builds.
+
+### T-308 · :designsystem module + "Doodle Kit" catalog app
+- ASSIGNED TO: Codex · STATUS: BACKLOG · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
+- DESCRIPTION: Move ui/design/** + fonts + licenses from :app into new Android library `:designsystem` (package com.example.projectpuzzle.designsystem). :app depends on it. New debug-only app module `:catalog` (applicationId com.example.projectpuzzle.catalog, label "Doodle Kit", never uploaded to Play) listing every foundation/component/game piece/screen specimen in all states, with preview toggles EN/HI, font scale 1.0/1.3, motion on/off (layout = Doodle Kit S8 board).
+- RULE (once built): a widget is not "done" until its Doodle Kit entry exists.
+

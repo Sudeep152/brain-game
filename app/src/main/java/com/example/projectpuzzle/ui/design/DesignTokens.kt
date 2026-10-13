@@ -38,6 +38,8 @@ object Sizes {
     val Badge = 22.dp
     val BadgeBorder = 2.dp
     val StreakCardWidth = 116.dp
+    val HeroDoodleWidth = 96.dp
+    val HeroDoodleHeight = 80.dp
 
     /** Minimum tappable size inside a 1000-unit-wide puzzle scene (~48 dp on a 390 dp screen). */
     const val PuzzleMinTouchUnits = 124
@@ -49,6 +51,7 @@ object Radii {
     val IconButton = 16.dp
     val Button = 18.dp
     val Card = 26.dp
+    val CardSmall = 20.dp
     val Board = 26.dp
 }
 

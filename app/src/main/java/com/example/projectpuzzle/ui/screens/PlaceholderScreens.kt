@@ -1,6 +1,10 @@
 package com.example.projectpuzzle.ui.screens
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -11,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
@@ -18,8 +24,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,12 +89,23 @@ fun HomeScreen(
             )
         }
 
-        InkCard(fill = PuzzleColors.Sun, modifier = Modifier.fillMaxWidth()) {
-            LabelText(stringResource(R.string.chapter_label, state.chapter))
-            Text(text = stringResource(R.string.level_label, state.level), style = type.display)
-            Text(text = stringResource(R.string.home_sample_tagline), style = type.body)
-            Spacer(Modifier.height(Spacing.XS))
-            PressableButton(text = stringResource(R.string.play_button), onClick = onPlay, modifier = Modifier.fillMaxWidth())
+        Box(modifier = Modifier.fillMaxWidth()) {
+            InkCard(
+                fill = PuzzleColors.Sun,
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(start = Spacing.XL, end = Spacing.XL, top = Spacing.XXL, bottom = Spacing.XXL),
+                verticalArrangement = Arrangement.spacedBy(Spacing.M),
+            ) {
+                Text(text = stringResource(R.string.chapter_label, state.chapter), style = type.meta)
+                Text(text = stringResource(R.string.level_label, state.level), style = type.display)
+                Text(text = stringResource(R.string.home_sample_tagline), style = type.body)
+                PressableButton(text = stringResource(R.string.play_button), onClick = onPlay, modifier = Modifier.fillMaxWidth())
+            }
+            HeroDoodles(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = Spacing.M, end = Spacing.L),
+            )
         }
 
         Row(
@@ -97,6 +119,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
+                radius = Radii.CardSmall,
                 contentPadding = PaddingValues(Spacing.L),
                 verticalArrangement = Arrangement.spacedBy(Spacing.XS),
             ) {
@@ -109,21 +132,22 @@ fun HomeScreen(
                 modifier = Modifier
                     .width(Sizes.StreakCardWidth)
                     .fillMaxHeight(),
-                contentPadding = PaddingValues(Spacing.M),
+                radius = Radii.CardSmall,
+                contentPadding = PaddingValues(Spacing.L),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(text = state.streakDays.toString(), style = type.stat)
-                Text(text = stringResource(R.string.streak_label), style = type.label, textAlign = TextAlign.Center)
+                Text(text = stringResource(R.string.streak_label), style = type.meta, textAlign = TextAlign.Center)
             }
         }
 
-        Spacer(Modifier.height(Spacing.XXXL))
+        Spacer(Modifier.weight(1f))
 
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.S)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(text = stringResource(R.string.chapter_label, state.chapter), style = type.buttonSmall)
-                Text(text = stringResource(R.string.progress_count, state.solved, state.total), style = type.buttonSmall)
+                Text(text = stringResource(R.string.chapter_label, state.chapter), style = type.meta)
+                Text(text = stringResource(R.string.progress_count, state.solved, state.total), style = type.meta)
             }
             InkProgressBar(
                 progress = state.solved.toFloat() / state.total.coerceAtLeast(1),
@@ -141,11 +165,12 @@ fun HomeScreen(
 @Composable
 fun PlayScreen(onBack: (() -> Unit)? = null) {
     val type = PuzzleTheme.type
+    val back = onBack ?: rememberSystemBack()
     ScreenColumn(scrollable = false) {
         TopBar(
             title = stringResource(R.string.level_label, HomeUiState.Sample.level),
             backContentDescription = stringResource(R.string.cd_back),
-            onBack = onBack,
+            onBack = back,
             hint = {
                 HintButton(
                     count = 3,
@@ -175,7 +200,12 @@ fun PlayScreen(onBack: (() -> Unit)? = null) {
                 style = PuzzleButtonStyle.Secondary,
                 modifier = Modifier.weight(1f),
             )
-            IconPressableButton(icon = PuzzleIcons.Restart, contentDescription = stringResource(R.string.cd_restart), onClick = {})
+            IconPressableButton(
+                icon = PuzzleIcons.Restart,
+                contentDescription = stringResource(R.string.cd_restart),
+                onClick = {},
+                size = Sizes.ButtonSmallHeight,
+            )
         }
         Text(
             text = stringResource(R.string.hint_ad_note),
@@ -189,11 +219,12 @@ fun PlayScreen(onBack: (() -> Unit)? = null) {
 
 @Composable
 fun SettingsScreen(onBack: (() -> Unit)? = null) {
+    val back = onBack ?: rememberSystemBack()
     ScreenColumn(scrollable = true) {
         TopBar(
             title = stringResource(R.string.settings_title),
             backContentDescription = stringResource(R.string.cd_back),
-            onBack = onBack,
+            onBack = back,
         )
         InkCard(fill = PuzzleColors.Surface, offRegister = false, modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(R.string.settings_placeholder), style = PuzzleTheme.type.body)
@@ -204,21 +235,63 @@ fun SettingsScreen(onBack: (() -> Unit)? = null) {
 /** Dotted paper, system-bar insets and screen padding (design doc §5). */
 @Composable
 private fun ScreenColumn(scrollable: Boolean, content: @Composable ColumnScope.() -> Unit) {
-    val base = Modifier
-        .fillMaxSize()
-        .dottedPaper()
-        .systemBarsPadding()
-    Column(
-        modifier = (if (scrollable) base.verticalScroll(rememberScrollState()) else base)
-            .padding(
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .dottedPaper()
+            .systemBarsPadding(),
+    ) {
+        val sized = if (scrollable) {
+            // At least one screen tall, so `weight` spacers still push content to the bottom;
+            // scrolls when large font scales make it taller.
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .heightIn(min = maxHeight)
+        } else {
+            Modifier.fillMaxSize()
+        }
+        Column(
+            modifier = sized.padding(
                 start = ScreenLayout.Horizontal,
                 end = ScreenLayout.Horizontal,
                 top = ScreenLayout.Top,
                 bottom = ScreenLayout.Bottom,
             ),
-        verticalArrangement = Arrangement.spacedBy(ScreenLayout.SectionGap),
-        content = content,
-    )
+            verticalArrangement = Arrangement.spacedBy(ScreenLayout.SectionGap),
+            content = content,
+        )
+    }
+}
+
+/** Uses the system back (Navigation3 handles it) when a screen isn't given an explicit onBack. */
+@Composable
+private fun rememberSystemBack(): () -> Unit {
+    val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    return remember(dispatcher) {
+        val action: () -> Unit = { dispatcher?.onBackPressed() }
+        action
+    }
+}
+
+/** Decorative red circle + mint triangle, ink outlines with off-register fills (mockup D-Home). */
+@Composable
+private fun HeroDoodles(modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier.size(width = Sizes.HeroDoodleWidth, height = Sizes.HeroDoodleHeight)) {
+        val u = 1.dp.toPx()
+        val shift = Sizes.OffRegister.toPx()
+        val stroke = Stroke(width = Sizes.OutlineUi.toPx())
+        val circleCenter = Offset(60 * u, 22 * u)
+        drawCircle(color = PuzzleColors.Red, radius = 18 * u, center = circleCenter + Offset(shift, shift))
+        drawCircle(color = PuzzleColors.Ink, radius = 18 * u, center = circleCenter, style = stroke)
+        fun triangle(dx: Float, dy: Float) = Path().apply {
+            moveTo(12 * u + dx, 64 * u + dy)
+            lineTo(30 * u + dx, 34 * u + dy)
+            lineTo(48 * u + dx, 64 * u + dy)
+            close()
+        }
+        drawPath(path = triangle(shift, shift), color = PuzzleColors.Mint)
+        drawPath(path = triangle(0f, 0f), color = PuzzleColors.Ink, style = stroke)
+    }
 }
 
 @Preview(name = "Home EN", widthDp = 390, heightDp = 844)

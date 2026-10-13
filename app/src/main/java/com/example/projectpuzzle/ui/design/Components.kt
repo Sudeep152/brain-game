@@ -199,7 +199,7 @@ fun PressableButton(
     }
 }
 
-/** 48 dp icon button with optional count badge. [contentDescription] is required for accessibility. */
+/** Square icon button (default 48 dp; use [Sizes.ButtonSmallHeight] next to a secondary button) with optional count badge. */
 @Composable
 fun IconPressableButton(
     icon: ImageVector,
@@ -208,15 +208,16 @@ fun IconPressableButton(
     modifier: Modifier = Modifier,
     fill: Color = PuzzleColors.Surface,
     badgeCount: Int? = null,
+    size: Dp = Sizes.IconButton,
 ) {
     Box(modifier = modifier) {
         PressableSurface(
             onClick = onClick,
             fill = fill,
-            height = Sizes.IconButton,
+            height = size,
             radius = Radii.IconButton,
             modifier = Modifier
-                .width(Sizes.IconButton)
+                .width(size)
                 .semantics { this.contentDescription = contentDescription },
         ) {
             Icon(imageVector = icon, contentDescription = null, tint = PuzzleColors.Ink, modifier = Modifier.size(Sizes.IconGlyph))

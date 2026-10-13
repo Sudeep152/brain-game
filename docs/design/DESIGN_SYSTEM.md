@@ -3,6 +3,7 @@
 Date: 2026-10-14 · Approved direction: **D · Marker Doodle** (owner, decision D-019)
 Mockups: https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn (rows D: Home + Puzzle)
 **Rule for every agent:** use only these tokens (code: `app/.../ui/design/`). New color, font size, radius or motion? Propose it here first.
+**Parity rule:** this doc = the mockup = the code. Any visible difference between mockup and app screenshot is a bug — fix the code, or (if the mockup used an off-token value) fix the mockup, never leave them different. Every design review compares a real device screenshot side by side with the mockup.
 
 ## 1. The idea in one line
 Hand-drawn ink outlines + bold marker colors printed slightly off-register, on warm dotted paper. Witty like a doodle, bright like a toy.
@@ -32,7 +33,7 @@ Rules: max 3 fill colors per screen besides paper/surface/ink. Meaning is never 
 ## 4. Typography
 Fonts (both SIL OFL, both include Devanagari for Hindi) — **bundle in `res/font`** (offline-first):
 - **Kalam Bold** — display only.
-- **Baloo 2** 500 / 700 / 800 — UI.
+- **Baloo 2** 500 / 700 / 800 — UI. Ship as **3 static files** (`baloo2_medium/bold/extrabold.ttf`) generated from the official variable font with fontTools `instancer`. Do NOT use the variable file: Android ignored its weight axis and rendered everything at 400 (found in T-307 review, 2026-10-14).
 | Style | Font | Size / line height | Use |
 |---|---|---|---|
 | `display` | Kalam 700 | 58 / 0.95 | Level number, solved headline |
@@ -41,7 +42,8 @@ Fonts (both SIL OFL, both include Devanagari for Hindi) — **bundle in `res/fon
 | `button` | Baloo 2 800 | 23 / 1.0 | Primary button |
 | `buttonSmall` | Baloo 2 700 | 18 / 1.0 | Secondary buttons |
 | `body` | Baloo 2 500 | 17 / 1.35 | Descriptions |
-| `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Small labels |
+| `meta` | Baloo 2 700 | 15 / 1.2 | Chapter line, progress numbers, small stat captions ("day streak") — never uppercased |
+| `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Category tags only (e.g. "DAILY PUZZLE") |
 | `caption` | Baloo 2 500 | 13 / 1.3 | Hint/ad note |
 Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that long Hindi strings wrap, never shrink below 13 sp. Respect system font scale up to 1.3×.
 
@@ -49,7 +51,10 @@ Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that lo
 - Grid: 4 dp. Scale: 4 · 8 · 12 · 16 · 20 · 24 · 32.
 - Screen padding: 22 dp horizontal, 20 dp top, 28 dp bottom. Section gap: 20 dp.
 - Touch targets: **≥ 48 dp** (icon buttons 48×48). In puzzle scenes (1000-unit wide virtual canvas ≈ 390 dp) tappables must be **≥ 124 units** — add to validator later.
-- Radii: chip 11 · icon button 16 · button 18 · card 26 · puzzle board 26.
+- Radii: chip 11 · icon button 16 · button 18 · small card 20 · card 26 · puzzle board 26.
+- Card padding: hero card 24 top / 20 sides / 24 bottom, gap 12 · small cards 16, gap 4. Off-register fill shift = 6 dp on every card (fill same size as outline).
+- Icon buttons 48×48; when sitting next to a secondary button they are 58×58 to match its height. Every pressable has the 5 dp ink edge.
+- Count badge: 22 dp circle, `ink` fill, 2 dp white border, white 13 sp bold number (white-on-red failed contrast).
 - Primary button height 60 dp; secondary 58 dp.
 
 ## 6. Components (build once, reuse)

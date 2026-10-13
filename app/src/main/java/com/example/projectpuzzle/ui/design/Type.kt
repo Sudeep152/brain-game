@@ -12,11 +12,15 @@ import com.example.projectpuzzle.R
 /** Kalam Bold (SIL OFL) — display text only. Covers Latin + Devanagari. */
 val KalamFamily = FontFamily(Font(R.font.kalam_bold, FontWeight.Bold))
 
-/** Baloo 2 variable font (SIL OFL) — all UI text. Covers Latin + Devanagari. */
+/**
+ * Baloo 2 (SIL OFL) — all UI text. Covers Latin + Devanagari.
+ * Static weight files (500/700/800) generated from the official variable font with fontTools:
+ * Android ignored the variable `wght` axis and drew everything at the default 400 (seen in T-307 screenshots).
+ */
 val Baloo2Family = FontFamily(
-    Font(R.font.baloo2_variable, FontWeight.Medium),
-    Font(R.font.baloo2_variable, FontWeight.Bold),
-    Font(R.font.baloo2_variable, FontWeight.ExtraBold),
+    Font(R.font.baloo2_medium, FontWeight.Medium),
+    Font(R.font.baloo2_bold, FontWeight.Bold),
+    Font(R.font.baloo2_extrabold, FontWeight.ExtraBold),
 )
 
 /** Type scale — docs/design/DESIGN_SYSTEM.md §4. */
@@ -30,6 +34,7 @@ data class PuzzleTypography(
     val buttonSmall: TextStyle,
     val body: TextStyle,
     val link: TextStyle,
+    val meta: TextStyle,
     val label: TextStyle,
     val caption: TextStyle,
 ) {
@@ -43,6 +48,7 @@ data class PuzzleTypography(
         buttonSmall = buttonSmall.copy(lineHeight = buttonSmall.lineHeight * scale),
         body = body.copy(lineHeight = body.lineHeight * scale),
         link = link.copy(lineHeight = link.lineHeight * scale),
+        meta = meta.copy(lineHeight = meta.lineHeight * scale),
         label = label.copy(lineHeight = label.lineHeight * scale),
         caption = caption.copy(lineHeight = caption.lineHeight * scale),
     )
@@ -57,6 +63,7 @@ val DefaultPuzzleTypography = PuzzleTypography(
     buttonSmall = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Bold, fontSize = 18.sp, lineHeight = 22.sp),
     body = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Medium, fontSize = 17.sp, lineHeight = 23.sp),
     link = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Bold, fontSize = 16.sp, lineHeight = 20.sp, textDecoration = TextDecoration.Underline),
+    meta = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Bold, fontSize = 15.sp, lineHeight = 18.sp),
     label = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Bold, fontSize = 13.sp, lineHeight = 16.sp, letterSpacing = 1.sp),
     caption = TextStyle(fontFamily = Baloo2Family, fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 17.sp),
 )

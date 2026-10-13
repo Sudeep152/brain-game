@@ -75,9 +75,9 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - EVIDENCE: written 2026-10-14; reviewer: Owner (Codex may raise issues while implementing T-302)
 
 ### T-202 · Three visual directions → owner picks one
-- ASSIGNED TO: Claude (UI/UX hat) · STATUS: IN_REVIEW · DEPENDS ON: T-104 approval · MILESTONE: M3
+- ASSIGNED TO: Claude (UI/UX hat) · STATUS: COMPLETED · DEPENDS ON: T-104 approval · MILESTONE: M3
 - FILES OWNED: docs/design/VISUAL_DIRECTIONS.md (+ mockups)
-- EVIDENCE: 3 directions × 3 screens on canvas https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn; comparison + recommendation (B Toybox) in docs/design/VISUAL_DIRECTIONS.md. REVIEWER: Owner (approval gate).
+- EVIDENCE: 3 directions × 3 screens on canvas https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn; round 2 mixes D/E/F added; **owner approved D · Marker Doodle** (D-019). Tokens in docs/design/DESIGN_SYSTEM.md.
 
 ### T-203 · Play Console account + 12 closed testers lined up
 - ASSIGNED TO: OWNER · STATUS: BACKLOG · MILESTONE: M3
@@ -146,8 +146,15 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - ACCEPTANCE: tests pass (real output); bundled levels still validate.
 - REVIEWER: Claude
 
+### T-307 · Design system in code (Marker Doodle)
+- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · BRANCH: task/T-307-design-system · DEPENDS ON: T-303 merged (same ui/design files)
+- DESCRIPTION: Implement docs/design/DESIGN_SYSTEM.md §3–8 in `app/.../ui/design/`: color tokens, typography (bundle Kalam Bold + Baloo 2 500/700/800 in res/font — both SIL OFL; add the license files under app/src/main/assets/licenses/), spacing/radii/sizes, motion specs as constants, and components `DottedPaper`, `InkCard` (off-register fill), `PressableButton` (primary/secondary/icon), `HintButton`, `TopBar`, `ProgressBar`. Restyle the existing placeholder Home/Play/Settings to use them (layout like mockup D-Home; no real data yet). Respect system font scale and animator scale = 0.
+- FILES OWNED: app/src/main/java/**/ui/design/**, app/src/main/java/**/ui/screens/**, app/src/main/res/font/**, app/src/main/assets/licenses/**
+- ACCEPTANCE: assembleDebug passes (real output); screenshots of Home in English AND Hindi on the emulator attached to the task (docs/design/screens/); no new colors/sizes outside the tokens; touch targets ≥ 48 dp.
+- REVIEWER: Claude (design review: visual consistency, interaction clarity, accessibility) + Owner
+
 ### T-304 · PuzzleCanvas renderer + Play screen (hit-test, drag, effects)
-- ASSIGNED TO: Codex · STATUS: BACKLOG · MILESTONE: M4 · DEPENDS ON: T-302, T-202 (visual direction)
+- ASSIGNED TO: Codex · STATUS: BACKLOG · MILESTONE: M4 · DEPENDS ON: T-302 ✅, T-202 ✅, T-307
 
 ### T-305 · Matchstick family: solver, generator, ≥1-solution validation
 - ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302

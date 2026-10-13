@@ -1,6 +1,6 @@
 # Visual Directions (T-202)
 
-Date: 2026-10-14 · Author: Claude (UI/UX hat) · Status: **IN REVIEW — owner must pick one (approval gate)**
+Date: 2026-10-14 · Author: Claude (UI/UX hat) · Status: **DECIDED — owner chose D · Marker Doodle (2026-10-14, D-019)**. Tokens: `DESIGN_SYSTEM.md`.
 Mockups (3 directions × Home / Puzzle / Solved, phone 390×844): https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn (private to owner)
 
 All three follow the same rules: one shared token set, no gradients/glass/emoji, touch targets ≥ 44 px, text contrast ≥ 4.5:1, fonts that also cover Hindi (Devanagari), hints = "unlock after a short video" (fair-ads policy D-012).
@@ -31,3 +31,15 @@ Why not C: most distinctive and cheapest, but object puzzles would need a second
 1. Lock tokens (colors, type scale, spacing, radii, motion) in `docs/design/DESIGN_SYSTEM.md` + `app/.../ui/design/`.
 2. T-304 renderer uses only those tokens.
 3. Each major screen goes through the 6 design reviews (MASTER_SPEC 5.4) with real screenshots.
+
+## Round 2 — mixes (owner liked A's warmth, wanted more appeal for kids + young players)
+| | D · Marker Doodle (A+B) | E · Sticker Book (A+B) | F · Hand-lettered Poster (A+C) |
+|---|---|---|---|
+| Look | ink outlines + off-register marker colors, pressable chunky buttons | die-cut stickers on a teal notebook cover, peel-to-drag, sticker-sheet progress | giant hand-lettered type, ink rules, one red accent |
+| Kids / Teens | ★★★ / ★★★ | ★★★ / ★★ | ★ / ★★★ |
+| Differentiation | strong | strong | medium |
+| Build cost | medium | medium | low |
+
+**Decision (D-019): D · Marker Doodle** — owner's pick, also Claude's recommendation: keeps A's wit, color pulls kids, off-register look is unlike Brain Out / Brain Test / DOP, drawable in code. E's sticker collection noted as a possible later reward system.
+
+**Audience note:** design appeals to all ages, but official Play target audience stays **13+** unless the owner decides otherwise — an under-13 audience brings Google Play Families policy limits on ads (to be verified before the store listing).

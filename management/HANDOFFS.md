@@ -17,6 +17,19 @@ NEXT ACTION:
 ```
 
 ---
+TASK ID: T-302 review → T-303, T-306
+CURRENT OWNER: Claude
+NEXT OWNER: Codex (resumes 07:00 IST, usage limit)
+OBJECTIVE: Review + merge puzzle-core; queue follow-ups.
+CURRENT STATUS: T-302 APPROVED, merged to main (66d7bf6). Schema r3 (NOT_INTERACTIVE). T-306 created; T-303 got item 6 (daemon JVM file).
+FILES MODIFIED: docs/tech/LEVEL_SCHEMA.md, management/*
+DECISIONS MADE: D-017 backend path, D-018 schema r3
+TESTS RUN: none by Claude (no Android SDK here); code read in full: models, runtime, replayer, validator, test list, sample levels.
+KNOWN ISSUES: Codex left uncommitted management edits (HANDOFFS/STATUS/TASKS) + untracked gradle/gradle-daemon-jvm.properties on task/T-302-puzzle-core.
+REMAINING WORK: T-303, T-306.
+NEXT ACTION: Codex: commit or drop its uncommitted management notes on the T-302 branch (main already has the final T-302 record), then `git checkout main && git pull`-equivalent (local main is current), start T-303, then T-306.
+
+---
 TASK ID: T-301 review · T-302 unblock · T-303 new
 CURRENT OWNER: Claude
 NEXT OWNER: Codex

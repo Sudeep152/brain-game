@@ -110,13 +110,15 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - REVIEW (Claude, 2026-10-14): **APPROVED & merged to main.** Clean module split (`:puzzle-core` has no Android deps ✅), version catalog, JDK 21, minSdk 26, no ads/analytics SDKs, EN+HI strings ✅. Non-blocking follow-ups → T-303. Owner to confirm launch on emulator/phone (T-005).
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
-- ASSIGNED TO: Codex · STATUS: IN_PROGRESS · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 ✅ · BRANCH: task/T-302-puzzle-core (created from T-301; merged main at 933fe6c)
+- ASSIGNED TO: Codex · STATUS: COMPLETED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 ✅ · BRANCH: task/T-302-puzzle-core (implementation ec9aebb merged to main as 66d7bf6)
 - DESCRIPTION: Implement docs/tech/LEVEL_SCHEMA.md in `:puzzle-core`: kotlinx.serialization models; `LevelValidator` (checklist §8, except touch-target size); `PuzzleSession` pure reducer with state machine (ARCHITECTURE §2), generic rules engine (events/conditions/actions §3–4); solution replay. Matchstick/oddoneout params: models only (logic comes later). Add 2 sample levels (teaser + combine) + en/hi strings under `app/src/main/assets/content/` and a test that loads every level in that folder, validates it and replays its solution to COMPLETED.
 - FILES OWNED: puzzle-core/src/**, app/src/main/assets/content/**
 - BLOCKER (Codex) RESOLVED (Claude, 2026-10-14): all 4 points answered in LEVEL_SCHEMA.md r2 — §0 encoding, §3 rules/triggers/conditions/actions, §3.1 + §6 runtime inputs vs triggers, §7 matchstick ≥1-solution check moved to T-305, §8–9 catalogs + ValidationContext. Decision D-015.
 - ALSO ADD: `app/src/main/assets/content/assets.json` (catalog per LEVEL_SCHEMA §8; entries may point to files that don't exist yet).
 - ACCEPTANCE: unit tests for reducer transitions, each trigger/condition/action type, runtime semantics in §6 (drag/dropOn/dragOut/snapBack, rule order, once, hints, timers), validator issue codes, and sample-level replay — all passing (real output). If the schema still has a gap or contradiction, don't invent: note it and message Claude.
 - REVIEWER: Claude
+- EVIDENCE (Codex, 2026-10-14, real output): `./gradlew :app:assembleDebug :puzzle-core:test` → BUILD SUCCESSFUL; 13 tests, 0 failures (runtime 7, validator 4, schema encoding 1, bundled-content validate+replay 1). `puzzle-core/src` has no Android imports.
+- REVIEW (Claude, 2026-10-14): **APPROVED & merged.** Matches LEVEL_SCHEMA r2 closely: strict parsing (`ignoreUnknownKeys=false`, `type` discriminator), pure deterministic reducer, rule order/once/snapBack/dropOn/dragOut per §6, timers via effects, issue codes with paths, bundled levels replayed in tests. Follow-ups (non-blocking) → T-306.
 
 ### T-303 · Skeleton follow-ups (from T-301 review)
 - ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-303-skeleton-followups (small; before or after T-302)
@@ -126,8 +128,21 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
   3. Back stack: use `rememberNavBackStack` with `@Serializable` `NavKey` routes so it survives process death/config change; make sure Back on Home exits the app.
   4. `Brand.AppName` duplicates `app_name`. Keep the product name in `app_name` only; Brand should not hold a literal copy (read from resources where needed).
   5. Lock MainActivity to portrait (MVP is portrait-only per ARCHITECTURE §2).
+  6. `gradle/gradle-daemon-jvm.properties` (untracked, generated with toolchainVersion=25): either commit it pinned to 21 to match the project toolchain, or delete it — say which and why.
 - FILES OWNED: gradle/libs.versions.toml, app/src/main/AndroidManifest.xml, app/src/main/java/**/ui/navigation/**, app/src/main/java/**/ui/design/Brand.kt
 - ACCEPTANCE: assembleDebug + tests pass (real output); no alpha/beta/rc.
+- REVIEWER: Claude
+
+### T-306 · puzzle-core review follow-ups (from T-302 review)
+- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-306-core-followups
+- DESCRIPTION:
+  1. **Interactivity check (schema gap, LEVEL_SCHEMA r3 §3.1/§9):** validator issue `NOT_INTERACTIVE` when a `tap`/`longPress` trigger targets an object without `tappable: true`, or a `dragEnd`/`dragOut` trigger or `drag` solution step targets an object without `draggable: true`. Runtime: `LongPress` must require `tappable` like `Tap` (today it doesn't — inconsistent).
+  2. **Logs:** `PuzzleState.logs` grows forever and is part of state equality. Move ignored-input logs out of state (e.g. `SessionResult.log`) or cap them.
+  3. **Replay diagnostics:** when a solution step is ignored by the session, `SolutionReplayer` should return an error naming the step index + reason (helps level authors).
+  4. Emoji literal check uses a single code point; multi-code-point emoji (e.g. ❤️, 👍🏽) are rejected. Accept one grapheme instead, or document the limit.
+  5. Tests for each item.
+- FILES OWNED: puzzle-core/src/**
+- ACCEPTANCE: tests pass (real output); bundled levels still validate.
 - REVIEWER: Claude
 
 ### T-304 · PuzzleCanvas renderer + Play screen (hit-test, drag, effects)

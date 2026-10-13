@@ -1,6 +1,6 @@
 # Level Schema v1 (T-201, revised for T-302)
 
-Date: 2026-10-14 · Revision: r2 (resolves Codex T-302 blockers 1–4, decision D-015)
+Date: 2026-10-14 · Revision: r3 (r2 resolved Codex T-302 blockers, D-015; r3 adds interactivity rule, D-018)
 Owner of truth: this file. `:puzzle-core` models must match it exactly. **Levels are data only** — no scripts, no expressions.
 
 ## 0. Encoding conventions (apply everywhere)
@@ -77,6 +77,8 @@ Teaser/combine levels must be winnable: at least one `win` action in `rules` **o
 
 `dragStart`, `dragMove`, `hintRequested`, `start`, `pause`, `resume` are **runtime inputs only** (§6). They are NOT valid rule triggers.
 
+**Interactivity rule (r3):** `tap` and `longPress` triggers may only target objects with `tappable: true`; `dragEnd`/`dragOut` triggers and `drag` solution steps may only target objects with `draggable: true`. Otherwise the validator reports `NOT_INTERACTIVE` (a rule that can never fire is a level bug).
+
 ### 3.2 Conditions — canonical encodings
 | type | fields |
 |---|---|
@@ -123,6 +125,7 @@ Replay = `start` then each step; level must end COMPLETED. Same for every `altSo
 ## 6. Runtime semantics (`PuzzleSession`)
 - **Inputs** (Kotlin API, not JSON): `Start`, `Pause`, `Resume`, `Tap(id)`, `LongPress(id)`, `DragStart(id)`, `DragMove(id, x, y)`, `DragEnd(id, x, y)`, `MultiTouch(count, id?)`, `Device(event)`, `TimerFired(id)`, `HintRequested`.
 - Inputs carry object ids; the app hit-tests using the core helper `Scene.hitTest(x, y)` = topmost (`z`, then later in list) **visible** object whose axis-aligned bounds contain the point.
+- `Tap` and `LongPress` are only accepted for visible `tappable` objects.
 - Only `Start` is accepted in READY; gameplay inputs only in PLAYING; everything else ignored (no state change, logged).
 - `DragStart/DragMove` only for `draggable` visible objects; they move the object (state) and fire no rules.
 - `DragEnd(id, x, y)`: object center set to (x, y). If the center is outside the scene → fire `dragOut` with the edge crossed (if two, the one with the larger overshoot). Otherwise fire `dragEnd` with `dropOn` = topmost visible other object whose bounds contain the dragged object's center (or none). If **no rule matched** and the object has `snapBack: true`, it returns to its drag-start position.
@@ -161,7 +164,7 @@ enum class AssetKind { BACKGROUND, SPRITE, SOUND }
 data class ValidationIssue(val code: String, val path: String, val message: String)
 fun validate(levelJson: String, ctx: ValidationContext): List<ValidationIssue>   // empty = valid; never throws
 ```
-Issue codes (minimum): `PARSE_ERROR`, `UNSUPPORTED_SCHEMA`, `UNSUPPORTED_RUNTIME`, `APP_TOO_OLD`, `MISSING_FIELD`, `FIELD_NOT_ALLOWED`, `DUPLICATE_ID`, `UNKNOWN_REFERENCE` (object/state/timer), `UNKNOWN_ASSET`, `WRONG_ASSET_KIND`, `MISSING_TEXT` (key missing for a declared locale), `MISSING_EN_LOCALE`, `OUT_OF_BOUNDS`, `INVALID_VALUE`, `TYPE_MISMATCH` (state), `NOT_WINNABLE` (no win action/condition), `HINT_COUNT`, `SOLUTION_FAILED` (replay didn't reach COMPLETED).
+Issue codes (minimum): `PARSE_ERROR`, `UNSUPPORTED_SCHEMA`, `UNSUPPORTED_RUNTIME`, `APP_TOO_OLD`, `MISSING_FIELD`, `FIELD_NOT_ALLOWED`, `DUPLICATE_ID`, `UNKNOWN_REFERENCE` (object/state/timer), `UNKNOWN_ASSET`, `WRONG_ASSET_KIND`, `MISSING_TEXT` (key missing for a declared locale), `MISSING_EN_LOCALE`, `OUT_OF_BOUNDS`, `INVALID_VALUE`, `TYPE_MISMATCH` (state), `NOT_INTERACTIVE`, `NOT_WINNABLE` (no win action/condition), `HINT_COUNT`, `SOLUTION_FAILED` (replay didn't reach COMPLETED).
 `path` is a JSON-pointer-like string, e.g. `/rules/2/do/0/target`.
 The app builds the context from assets at startup; tests build it from `app/src/main/assets/content/`.
 

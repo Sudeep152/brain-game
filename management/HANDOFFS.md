@@ -17,6 +17,19 @@ NEXT ACTION:
 ```
 
 ---
+TASK ID: T-307 (design system in code)
+CURRENT OWNER: Claude
+NEXT OWNER: Codex (verifier) → Owner (approve) → merge
+OBJECTIVE: Marker Doodle tokens + components + restyled placeholder screens.
+CURRENT STATUS: Implemented on branch task/T-307-design-system. NOT COMPILED (no Google Maven/Gradle access from Claude).
+FILES MODIFIED: app/src/main/java/**/ui/design/{Colors,Type,DesignTokens,Theme,Components,PuzzleIcons}.kt, ui/screens/PlaceholderScreens.kt, res/font/*, res/values{,-hi}/strings.xml, res/values/colors.xml, res/values/styles.xml, assets/licenses/*
+DECISIONS MADE: none new (follows DESIGN_SYSTEM.md / D-019). Added tokens `stat` text style and `StreakCardWidth`, `IconGlyph`, `Badge*`, `ProgressHeight` sizes (doc to be synced).
+TESTS RUN: none — could not build. Self-reviewed imports/signatures; screen function signatures stay compatible with current navigation.
+KNOWN ISSUES: Hindi strings written by Claude — owner to proofread. Home scrolls (fixed bottom spacer) so large font scales don't clip.
+REMAINING WORK: build, fix, screenshots, code review (see TASKS T-307 VERIFY).
+NEXT ACTION: Codex checks out task/T-307-design-system after T-303, merges main into it if needed, builds.
+
+---
 TASK ID: T-302 review → T-303, T-306
 CURRENT OWNER: Claude
 NEXT OWNER: Codex (resumes 07:00 IST, usage limit)

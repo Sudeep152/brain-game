@@ -36,12 +36,14 @@ Fonts (both SIL OFL, both include Devanagari for Hindi) — **bundle in `res/fon
 | Style | Font | Size / line height | Use |
 |---|---|---|---|
 | `display` | Kalam 700 | 58 / 0.95 | Level number, solved headline |
+| `stat` | Kalam 700 | 38 / 1.05 | Streak number, small stats |
 | `title` | Kalam 700 | 32 / 1.15 | Puzzle prompt |
 | `headline` | Kalam 700 | 24 / 1.1 | Card titles, top bar title |
 | `button` | Baloo 2 800 | 23 / 1.0 | Primary button |
 | `buttonSmall` | Baloo 2 700 | 18 / 1.0 | Secondary buttons |
 | `body` | Baloo 2 500 | 17 / 1.35 | Descriptions |
 | `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Small labels |
+| `link` | Baloo 2 700 | 16 / 1.25, underlined | Text actions (48 dp touch area) |
 | `caption` | Baloo 2 500 | 13 / 1.3 | Hint/ad note |
 Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that long Hindi strings wrap, never shrink below 13 sp. Respect system font scale up to 1.3×.
 
@@ -50,7 +52,7 @@ Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that lo
 - Screen padding: 22 dp horizontal, 20 dp top, 28 dp bottom. Section gap: 20 dp.
 - Touch targets: **≥ 48 dp** (icon buttons 48×48). In puzzle scenes (1000-unit wide virtual canvas ≈ 390 dp) tappables must be **≥ 124 units** — add to validator later.
 - Radii: chip 11 · icon button 16 · button 18 · card 26 · puzzle board 26.
-- Primary button height 60 dp; secondary 58 dp.
+- Primary button height 60 dp; secondary 58 dp. Icon glyph 22 dp. Count badge 22 dp. Progress bar 20 dp. Streak card 116 dp wide.
 
 ## 6. Components (build once, reuse)
 `InkCard` (outline + off-register fill, color param) · `PressableButton` (primary red / secondary white / icon) · `HintButton` (sun + count badge) · `TopBar` (back · title · hint) · `ProgressBar` (ink outline, red fill) · `DottedPaper` background · `Badge`.

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "bg.paper": { "kind": "background", "file": "bg/paper.webp" },
+    "obj.fire": { "kind": "sprite", "file": "sprites/fire.xml" },
+    "obj.ice": { "kind": "sprite", "file": "sprites/ice.xml" },
+    "obj.water": { "kind": "sprite", "file": "sprites/water.xml" },
+    "sfx.pop": { "kind": "sound", "file": "sfx/pop.ogg" }
+  }
+}

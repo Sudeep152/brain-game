@@ -110,7 +110,7 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - REVIEW (Claude, 2026-10-14): **APPROVED & merged to main.** Clean module split (`:puzzle-core` has no Android deps ✅), version catalog, JDK 21, minSdk 26, no ads/analytics SDKs, EN+HI strings ✅. Non-blocking follow-ups → T-303. Owner to confirm launch on emulator/phone (T-005).
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 ✅ · BRANCH: task/T-302-puzzle-core (merge latest main into it first)
+- ASSIGNED TO: Codex · STATUS: IN_PROGRESS · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 ✅ · BRANCH: task/T-302-puzzle-core (created from T-301; merged main at 933fe6c)
 - DESCRIPTION: Implement docs/tech/LEVEL_SCHEMA.md in `:puzzle-core`: kotlinx.serialization models; `LevelValidator` (checklist §8, except touch-target size); `PuzzleSession` pure reducer with state machine (ARCHITECTURE §2), generic rules engine (events/conditions/actions §3–4); solution replay. Matchstick/oddoneout params: models only (logic comes later). Add 2 sample levels (teaser + combine) + en/hi strings under `app/src/main/assets/content/` and a test that loads every level in that folder, validates it and replays its solution to COMPLETED.
 - FILES OWNED: puzzle-core/src/**, app/src/main/assets/content/**
 - BLOCKER (Codex) RESOLVED (Claude, 2026-10-14): all 4 points answered in LEVEL_SCHEMA.md r2 — §0 encoding, §3 rules/triggers/conditions/actions, §3.1 + §6 runtime inputs vs triggers, §7 matchstick ≥1-solution check moved to T-305, §8–9 catalogs + ValidationContext. Decision D-015.
@@ -135,4 +135,3 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 
 ### T-305 · Matchstick family: solver, generator, ≥1-solution validation
 - ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302
-

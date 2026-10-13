@@ -43,13 +43,9 @@ Fonts (both SIL OFL, both include Devanagari for Hindi) — **bundle in `res/fon
 | `button` | Baloo 2 800 | 23 / 1.0 | Primary button |
 | `buttonSmall` | Baloo 2 700 | 18 / 1.0 | Secondary buttons |
 | `body` | Baloo 2 500 | 17 / 1.35 | Descriptions |
-<<<<<<< HEAD
-| `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Small labels |
-| `link` | Baloo 2 700 | 16 / 1.25, underlined | Text actions (48 dp touch area) |
-=======
 | `meta` | Baloo 2 700 | 15 / 1.2 | Chapter line, progress numbers, small stat captions ("day streak") — never uppercased |
 | `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Category tags only (e.g. "DAILY PUZZLE") |
->>>>>>> task/T-307-design-system
+| `link` | Baloo 2 700 | 16 / 1.25, underlined | Text actions (48 dp touch area) |
 | `caption` | Baloo 2 500 | 13 / 1.3 | Hint/ad note |
 Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that long Hindi strings wrap, never shrink below 13 sp. Respect system font scale up to 1.3×.
 
@@ -57,16 +53,11 @@ Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that lo
 - Grid: 4 dp. Scale: 4 · 8 · 12 · 16 · 20 · 24 · 32.
 - Screen padding: 22 dp horizontal, 20 dp top, 28 dp bottom. Section gap: 20 dp.
 - Touch targets: **≥ 48 dp** (icon buttons 48×48). In puzzle scenes (1000-unit wide virtual canvas ≈ 390 dp) tappables must be **≥ 124 units** — add to validator later.
-<<<<<<< HEAD
-- Radii: chip 11 · icon button 16 · button 18 · card 26 · puzzle board 26.
-- Primary button height 60 dp; secondary 58 dp. Icon glyph 22 dp. Count badge 22 dp. Progress bar 20 dp. Streak card 116 dp wide.
-=======
 - Radii: chip 11 · icon button 16 · button 18 · small card 20 · card 26 · puzzle board 26.
 - Card padding: hero card 24 top / 20 sides / 24 bottom, gap 12 · small cards 16, gap 4. Off-register fill shift = 6 dp on every card (fill same size as outline).
 - Icon buttons 48×48; when sitting next to a secondary button they are 58×58 to match its height. Every pressable has the 5 dp ink edge.
 - Count badge: 22 dp circle, `ink` fill, 2 dp white border, white 13 sp bold number (white-on-red failed contrast).
-- Primary button height 60 dp; secondary 58 dp.
->>>>>>> task/T-307-design-system
+- Primary button height 60 dp; secondary 58 dp. Icon glyph 22 dp. Progress bar 20 dp. Streak card 116 dp wide.
 
 ## 6. Components (build once, reuse)
 `InkCard` (outline + off-register fill, color param) · `PressableButton` (primary red / secondary white / icon) · `HintButton` (sun + count badge) · `TopBar` (back · title · hint) · `ProgressBar` (ink outline, red fill) · `DottedPaper` background · `Badge`.

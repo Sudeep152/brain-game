@@ -9,4 +9,19 @@
     <string name="play_placeholder">पहेली की सामग्री यहाँ दिखाई देगी।</string>
     <string name="settings_title">सेटिंग्स</string>
     <string name="settings_placeholder">गेम की प्राथमिकताएँ यहाँ दिखाई देंगी।</string>
+    <string name="chapter_label">अध्याय %1$d</string>
+    <string name="level_label">लेवल %1$d</string>
+    <string name="home_sample_tagline">आग, बर्फ़ और एक चतुर चाल।</string>
+    <string name="daily_label">आज की पहेली</string>
+    <string name="daily_sample_title">अलग कौन है?</string>
+    <string name="daily_play">आज की पहेली खेलें</string>
+    <string name="streak_label">दिन लगातार</string>
+    <string name="progress_count">%2$d में से %1$d</string>
+    <string name="all_levels">सभी लेवल</string>
+    <string name="cd_back">वापस</string>
+    <string name="cd_hint">संकेत लें, %1$d बाकी</string>
+    <string name="cd_restart">लेवल फिर से शुरू करें</string>
+    <string name="cd_progress">%2$d में से %1$d लेवल हल</string>
+    <string name="hint_button">अटक गए? संकेत लें</string>
+    <string name="hint_ad_note">छोटा वीडियो देखने के बाद संकेत मिलता है।</string>
 </resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches PuzzleColors.Paper; window background avoids a white flash before Compose draws. -->
+    <color name="paper">#FBF6EC</color>
+</resources>

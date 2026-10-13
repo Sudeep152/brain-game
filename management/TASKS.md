@@ -13,14 +13,16 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - REVIEWER: Owner · EVIDENCE: files created 2026-10-14 (Day 0)
 
 ### T-002 · Rename folder to `brain-game` and re-point tools
-- ASSIGNED TO: OWNER · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M0
+- ASSIGNED TO: OWNER · STATUS: COMPLETED · PRIORITY: P0 · MILESTONE: M0
 - DESCRIPTION: Rename "Brain Game AI Dev" → `brain-game` (spaces break native/NDK builds). Then re-select the folder in Codex project and in the Claude chat.
 - ACCEPTANCE: Both tools open the renamed folder.
+- EVIDENCE: folder is /Users/shashank/brain-game (2026-10-14); Claude reconnected. Codex to re-point.
 
 ### T-003 · Git + private GitHub repo
-- ASSIGNED TO: OWNER · STATUS: BACKLOG · PRIORITY: P1 · MILESTONE: M0
+- ASSIGNED TO: OWNER · STATUS: COMPLETED · PRIORITY: P1 · MILESTONE: M0
 - DESCRIPTION: `git init`, first commit, private GitHub repo. Until done: one tool edits at a time.
 - ACCEPTANCE: Repo exists, `.gitignore` in place, first commit pushed.
+- EVIDENCE: commit a455d48 pushed to https://github.com/Sudeep152/brain-game (main), 2026-10-14.
 
 ### T-005 · Confirm emulator / test device works
 - ASSIGNED TO: OWNER · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M0
@@ -88,15 +90,15 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 ## M4 — Build (Codex)
 
 ### T-301 · Android project skeleton
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4
-- DEPENDS ON: T-002 (folder renamed), T-201
+- ASSIGNED TO: Codex · STATUS: IN_PROGRESS · PRIORITY: P0 · MILESTONE: M4
+- DEPENDS ON: T-002 ✅, T-201 · BRANCH: task/T-301-project-skeleton
 - DESCRIPTION: Create Gradle project per docs/tech/ARCHITECTURE.md §5: modules `:app` (Android, Compose) and `:puzzle-core` (pure Kotlin/JVM, no Android deps). Version catalog, Gradle wrapper, JDK 21 toolchain, latest STABLE libs only (Compose, Navigation3, Hilt+KSP, Room+KSP, DataStore, kotlinx.serialization). minSdk 26; compile/target = newest stable API installed. applicationId `com.example.projectpuzzle` (placeholder). App name only in `app_name` + a `Brand` object. Placeholder screens Home / Play / Settings wired with Navigation3. English + Hindi `values`/`values-hi` for the few UI strings. Placeholder theme in `ui/design/` (tokens file; real visual direction comes in T-202 — keep it plain, don't invent a style).
 - FILES OWNED: settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/**, gradlew, gradlew.bat, app/**, puzzle-core/build.gradle.kts
 - ACCEPTANCE: `./gradlew :app:assembleDebug` and `./gradlew :puzzle-core:test` succeed (paste real output tail in EVIDENCE); app launches to Home on emulator if available; no alpha/beta libs; no ads/analytics SDKs yet.
 - REVIEWER: Claude
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301
+- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 · BRANCH: task/T-302-puzzle-core (from main after T-301 merged, or from T-301 branch if not yet merged — say which)
 - DESCRIPTION: Implement docs/tech/LEVEL_SCHEMA.md in `:puzzle-core`: kotlinx.serialization models; `LevelValidator` (checklist §8, except touch-target size); `PuzzleSession` pure reducer with state machine (ARCHITECTURE §2), generic rules engine (events/conditions/actions §3–4); solution replay. Matchstick/oddoneout params: models only (logic comes later). Add 2 sample levels (teaser + combine) + en/hi strings under `app/src/main/assets/content/` and a test that loads every level in that folder, validates it and replays its solution to COMPLETED.
 - FILES OWNED: puzzle-core/src/**, app/src/main/assets/content/**
 - ACCEPTANCE: unit tests for reducer transitions, each event/condition/action type, validator failures, and sample-level replay — all passing (real output). If the schema has a gap or contradiction, don't invent: note it and message Claude.

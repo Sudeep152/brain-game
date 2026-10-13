@@ -15,3 +15,4 @@
 | D-011 | 2026-10-14 | Tech stack: Kotlin + Jetpack Compose + custom Canvas puzzle runtime, JSON levels, no game engine for MVP (RUNTIME_OPTIONS.md option A). | Fastest, owner's expertise, small app; physics/Unity can plug in later via `runtime` field. | Yes |
 | D-012 | 2026-10-14 | Fair-ads policy as starting hypothesis: rewarded ads for hints; no interstitials in first 10 levels; max 1 per 3 levels; never after a fail. | #1 competitor complaint is ads. Measure revenue vs retention. | Yes |
 | D-013 | 2026-10-14 | **PENDING owner:** final applicationId. Placeholder `com.example.projectpuzzle` (Play rejects it, forcing a decision before upload). | applicationId = permanent Play identity. | Pending |
+| D-014 | 2026-10-14 | Git workflow: branch per task, Claude reviews → merge to main, owner pushes/vetoes; Claude may commit docs/management-only changes on main. (PROJECT_RULES §6) | Repo + GitHub now exist; enables safe parallel work. | Yes (owner set up repo) |

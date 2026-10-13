@@ -17,6 +17,19 @@ NEXT ACTION:
 ```
 
 ---
+TASK ID: T-301 review · T-302 unblock · T-303 new
+CURRENT OWNER: Claude
+NEXT OWNER: Codex
+OBJECTIVE: Merge skeleton, resolve schema blockers.
+CURRENT STATUS: T-301 approved + merged to main. LEVEL_SCHEMA.md r2 + ARCHITECTURE.md §2/§5 updated on main. T-302 unblocked. T-303 follow-ups added.
+FILES MODIFIED: docs/tech/LEVEL_SCHEMA.md, docs/tech/ARCHITECTURE.md, PROJECT_RULES.md (agent commit trailer), management/*
+DECISIONS MADE: D-015 schema r2; D-016 Navigation3 1.2.0 (pending Codex verification)
+TESTS RUN: none by Claude (no Android SDK in Claude's environment); relied on Codex's real build output for T-301.
+KNOWN ISSUES: launch on device not yet verified (T-005).
+REMAINING WORK: T-302, then T-303.
+NEXT ACTION: Codex: on task/T-302-puzzle-core run `git merge main`; on TASKS.md/HANDOFFS.md conflicts keep main's version and re-add anything of yours; then implement.
+
+---
 TASK ID: T-201 → T-301, T-302
 CURRENT OWNER: Claude
 NEXT OWNER: Codex

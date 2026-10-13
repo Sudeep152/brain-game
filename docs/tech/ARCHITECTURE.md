@@ -29,8 +29,8 @@ Date: 2026-10-14 · Author: Claude · Status: draft for owner review · Based on
 
 ## 2. Puzzle runtime
 - **Pure reducer:** `session.handle(event) → (newState, effects)`. Deterministic, no clocks/randomness inside (seeds and time are passed in) → replayable, testable.
-- **Events (input):** tap, longPress, dragStart/dragMove/dragEnd(dropOn), dragOut(edge), multiTouch(n), device(shake, flipUpsideDown, faceDown, tiltLeft, tiltRight, volumeUp, volumeDown, chargerConnected), timer(id), hintRequested.
-- **Effects (output):** playSound, haptic, animate, showFeedback, levelCompleted. `:app` executes them.
+- **Runtime inputs** (Kotlin API): Start, Pause, Resume, Tap, LongPress, DragStart, DragMove, DragEnd, MultiTouch, Device, TimerFired, HintRequested. **Rule triggers** in level JSON are a smaller set (tap, longPress, dragEnd, dragOut, multiTouch, device, timer) — DragStart/DragMove/HintRequested never fire rules. Exact semantics: `LEVEL_SCHEMA.md` §6.
+- **Effects (output):** PlaySound, Haptic, Animate, Feedback, ScheduleTimer, CancelTimer, ShowHint, ShowSolution, LevelCompleted. `:app` executes them.
 - **State machine:** `NOT_LOADED → LOADING → READY → PLAYING ⇄ PAUSED → COMPLETED`; `LOADING → ERROR`; `PLAYING → FAILED` only for timed modes (daily). No other transitions allowed; illegal events are ignored and logged.
 - **Coordinates:** each scene uses virtual units (default 1000 × 1600, portrait). Renderer scales to the screen with letterboxing → levels look identical on all phones. MVP is portrait-only.
 - **Rendering:** Compose `Canvas` inside a `PuzzleCanvas` composable. Animation frames via `withFrameNanos`; logic is event-driven, not frame-driven. Physics runtime (JBox2D) can be added later behind `runtime: "physics-v1"`.
@@ -50,7 +50,7 @@ Date: 2026-10-14 · Author: Claude · Status: draft for owner review · Based on
 | Area | Choice | Note |
 |---|---|---|
 | Language/UI | Kotlin 2.x, Jetpack Compose, Material 3 as base (heavily themed) | Compose 1.12.x stable (Sep 2026) |
-| Navigation | Navigation3 | stable 1.2.0 (Sep 2026); back stack as simple state — fits a game |
+| Navigation | Navigation3 | latest stable 1.2.0 (released stable 2026-09-23 per developer.android.com/jetpack/androidx/releases/navigation3); back stack via `rememberNavBackStack` |
 | DI | Hilt + KSP | standard, Codex/owner familiar |
 | JSON | kotlinx.serialization | works in pure-Kotlin core |
 | DB | Room 2.8.x + KSP | progress + daily history |

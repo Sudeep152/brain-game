@@ -90,16 +90,49 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 ## M4 — Build (Codex)
 
 ### T-301 · Android project skeleton
-- ASSIGNED TO: Codex · STATUS: IN_PROGRESS · PRIORITY: P0 · MILESTONE: M4
-- DEPENDS ON: T-002 ✅, T-201 · BRANCH: task/T-301-project-skeleton
+- ASSIGNED TO: Codex · STATUS: COMPLETED · PRIORITY: P0 · MILESTONE: M4
+- DEPENDS ON: T-002 ✅, T-201 · BRANCH: task/T-301-project-skeleton (merged to main)
 - DESCRIPTION: Create Gradle project per docs/tech/ARCHITECTURE.md §5: modules `:app` (Android, Compose) and `:puzzle-core` (pure Kotlin/JVM, no Android deps). Version catalog, Gradle wrapper, JDK 21 toolchain, latest STABLE libs only (Compose, Navigation3, Hilt+KSP, Room+KSP, DataStore, kotlinx.serialization). minSdk 26; compile/target = newest stable API installed. applicationId `com.example.projectpuzzle` (placeholder). App name only in `app_name` + a `Brand` object. Placeholder screens Home / Play / Settings wired with Navigation3. English + Hindi `values`/`values-hi` for the few UI strings. Placeholder theme in `ui/design/` (tokens file; real visual direction comes in T-202 — keep it plain, don't invent a style).
 - FILES OWNED: settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/**, gradlew, gradlew.bat, app/**, puzzle-core/build.gradle.kts
 - ACCEPTANCE: `./gradlew :app:assembleDebug` and `./gradlew :puzzle-core:test` succeed (paste real output tail in EVIDENCE); app launches to Home on emulator if available; no alpha/beta libs; no ads/analytics SDKs yet.
 - REVIEWER: Claude
+- FILES TOUCHED: settings.gradle.kts, build.gradle.kts, gradle.properties, gradle/**, gradlew, gradlew.bat, app/**, puzzle-core/build.gradle.kts, this task entry
+- EVIDENCE (2026-10-14): `ANDROID_HOME=/Users/shashank/Library/Android/sdk ./gradlew :app:assembleDebug :puzzle-core:test`
+  ```text
+  > Task :puzzle-core:test NO-SOURCE
+  > Task :app:assembleDebug
+  BUILD SUCCESSFUL in 47s
+  42 actionable tasks: 42 executed
+  Configuration cache entry stored.
+  ```
+- DEPENDENCY CHECK: `:app:dependencies --configuration debugRuntimeClasspath` succeeded; automated case-insensitive scan found 0 `alpha`/`beta`/`rcN` matches. Navigation3 uses stable 1.1.7 because the documented 1.2.0 is currently RC, not stable.
+- LIMIT: `adb devices -l` found no attached device/emulator, so launch-to-Home was not run.
+- REVIEW (Claude, 2026-10-14): **APPROVED & merged to main.** Clean module split (`:puzzle-core` has no Android deps ✅), version catalog, JDK 21, minSdk 26, no ads/analytics SDKs, EN+HI strings ✅. Non-blocking follow-ups → T-303. Owner to confirm launch on emulator/phone (T-005).
 
 ### T-302 · puzzle-core: schema models, validator, session (reducer)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 · BRANCH: task/T-302-puzzle-core (from main after T-301 merged, or from T-301 branch if not yet merged — say which)
+- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P0 · MILESTONE: M4 · DEPENDS ON: T-301 ✅ · BRANCH: task/T-302-puzzle-core (merge latest main into it first)
 - DESCRIPTION: Implement docs/tech/LEVEL_SCHEMA.md in `:puzzle-core`: kotlinx.serialization models; `LevelValidator` (checklist §8, except touch-target size); `PuzzleSession` pure reducer with state machine (ARCHITECTURE §2), generic rules engine (events/conditions/actions §3–4); solution replay. Matchstick/oddoneout params: models only (logic comes later). Add 2 sample levels (teaser + combine) + en/hi strings under `app/src/main/assets/content/` and a test that loads every level in that folder, validates it and replays its solution to COMPLETED.
 - FILES OWNED: puzzle-core/src/**, app/src/main/assets/content/**
-- ACCEPTANCE: unit tests for reducer transitions, each event/condition/action type, validator failures, and sample-level replay — all passing (real output). If the schema has a gap or contradiction, don't invent: note it and message Claude.
+- BLOCKER (Codex) RESOLVED (Claude, 2026-10-14): all 4 points answered in LEVEL_SCHEMA.md r2 — §0 encoding, §3 rules/triggers/conditions/actions, §3.1 + §6 runtime inputs vs triggers, §7 matchstick ≥1-solution check moved to T-305, §8–9 catalogs + ValidationContext. Decision D-015.
+- ALSO ADD: `app/src/main/assets/content/assets.json` (catalog per LEVEL_SCHEMA §8; entries may point to files that don't exist yet).
+- ACCEPTANCE: unit tests for reducer transitions, each trigger/condition/action type, runtime semantics in §6 (drag/dropOn/dragOut/snapBack, rule order, once, hints, timers), validator issue codes, and sample-level replay — all passing (real output). If the schema still has a gap or contradiction, don't invent: note it and message Claude.
 - REVIEWER: Claude
+
+### T-303 · Skeleton follow-ups (from T-301 review)
+- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-303-skeleton-followups (small; before or after T-302)
+- DESCRIPTION:
+  1. Navigation3 → **1.2.0**. The official release page lists 1.2.0 as stable since 2026-09-23 (rc01 was 09-09). If Gradle can't resolve 1.2.0 from Google Maven, stop and report the exact error instead.
+  2. Bump to latest stable: lifecycle 2.11.0, core-ktx 1.19.1 (check others the same way).
+  3. Back stack: use `rememberNavBackStack` with `@Serializable` `NavKey` routes so it survives process death/config change; make sure Back on Home exits the app.
+  4. `Brand.AppName` duplicates `app_name`. Keep the product name in `app_name` only; Brand should not hold a literal copy (read from resources where needed).
+  5. Lock MainActivity to portrait (MVP is portrait-only per ARCHITECTURE §2).
+- FILES OWNED: gradle/libs.versions.toml, app/src/main/AndroidManifest.xml, app/src/main/java/**/ui/navigation/**, app/src/main/java/**/ui/design/Brand.kt
+- ACCEPTANCE: assembleDebug + tests pass (real output); no alpha/beta/rc.
+- REVIEWER: Claude
+
+### T-304 · PuzzleCanvas renderer + Play screen (hit-test, drag, effects)
+- ASSIGNED TO: Codex · STATUS: BACKLOG · MILESTONE: M4 · DEPENDS ON: T-302, T-202 (visual direction)
+
+### T-305 · Matchstick family: solver, generator, ≥1-solution validation
+- ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302
+

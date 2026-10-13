@@ -45,6 +45,7 @@ Role cards for specialist hats (research, game design, Android, QA, …): `agent
 - Docs/management-only updates by Claude may be committed directly on `main` if no code files are touched.
 - Before starting: `git status` must be clean and you must be on the right branch. Never commit on someone else's task branch.
 - Never force-push, rebase shared branches, reset, or delete others' work. Never commit secrets.
+- Every agent commit says who made it: message starts with the task id, and ends with a trailer line `Agent: Codex` / `Agent: Claude` / `Agent: <name>` (commits may use the owner's git identity).
 - Two agents may work at the same time only on different branches with non-overlapping `FILES OWNED`.
 - Never overwrite or "clean up" the owner's code without asking.
 

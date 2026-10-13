@@ -147,7 +147,7 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - REVIEWER: Claude
 
 ### T-307 · Design system in code (Marker Doodle)
-- ASSIGNED TO: Claude (implementation, owner's call 2026-10-14 while Codex was paused) · VERIFIER: Codex · STATUS: IN_REVIEW · PRIORITY: P0 · MILESTONE: M4 · BRANCH: task/T-307-design-system (commit on branch, NOT merged)
+- ASSIGNED TO: Claude (implementation, owner's call 2026-10-14 while Codex was paused) · VERIFIER: Owner · STATUS: COMPLETED · PRIORITY: P0 · MILESTONE: M4 · BRANCH: task/T-307-design-system (merged to main)
 - OWNER CHECK (2026-10-14 04:33): owner built 167bbdf on device — compiled with no changes. Screenshots showed mockup/app differences (Baloo 2 rendered at weight 400, label/meta sizes, card padding/radius, missing doodles, back button, badge). Fixed in 96ddba0 (static Baloo 2 weights, `meta` style, parity rule in DESIGN_SYSTEM.md, mockup D synced). 96ddba0 not yet rebuilt.
 - ⚠ NOT COMPILED: Claude's environments cannot reach Google Maven / Gradle. Verifier must build, fix compile errors (small, note each fix), take screenshots, and review the code.
 - DONE BY CLAUDE: tokens (Colors.kt, Type.kt, DesignTokens.kt), Theme.kt (Devanagari line-height x1.15, reduce-motion, no uppercase for Hindi), Components.kt (dottedPaper, InkCard, PressableSurface/Button, IconPressableButton, CountBadge, HintButton, TopBar, InkProgressBar, LabelText, TextLink), PuzzleIcons.kt, fonts in res/font + OFL licenses, restyled Home/Play/Settings + EN/HI previews, strings EN/HI, colors.xml + windowBackground. Did not touch navigation or Brand.kt (T-303).
@@ -164,12 +164,12 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302
 
 ### T-309 · Doodle Kit visuals — full component library (design)
-- ASSIGNED TO: Claude · STATUS: IN_REVIEW · REVIEWER: Owner (approval gate: visual)
+- ASSIGNED TO: Claude · STATUS: COMPLETED · REVIEWER: Owner (approval gate: visual)
 - EVIDENCE: canvas https://claude.ai/artifact/U17w2oyqASxLS6bPJryut1 — 4 pages: Foundations (colors+type EN/HI; space, shape, 20 icons, motion), Components (buttons, cards/bars/status, inputs/controls incl. text field, switch, segmented, checkbox/radio, quiz answer options, code input; feedback/overlays incl. hint sheet, dialog, rewarded prompt, banner/loader/empty/error), Game pieces (shape primitives, 8 objects, 7 interaction states, tokens, matchstick, odd-one-out tile; 8 device cues + sensor fallback + sound cues + camera/mic primer marked LATER; celebration), Screens (level map, solved, hint sheet, settings, daily+share card, first launch, offline video state, Doodle Kit app home).
-- NEXT: owner approves/edits → Claude writes the final widget + component list with states (docs/design/COMPONENTS.md) → Codex builds.
+- APPROVED by owner 2026-10-14 05:07 ("everything looking fine"), incl. wood token + camera/mic as LATER (D-021).
 
-### T-308 · :designsystem module + "Doodle Kit" catalog app
-- ASSIGNED TO: Codex · STATUS: BACKLOG · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
+### T-308 · :designsystem module + "Doodle Kit" catalog app + all components
+- ASSIGNED TO: Claude (owner's call 2026-10-14) · STATUS: IN_PROGRESS · BRANCH: task/T-308-designsystem-catalog · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
 - DESCRIPTION: Move ui/design/** + fonts + licenses from :app into new Android library `:designsystem` (package com.example.projectpuzzle.designsystem). :app depends on it. New debug-only app module `:catalog` (applicationId com.example.projectpuzzle.catalog, label "Doodle Kit", never uploaded to Play) listing every foundation/component/game piece/screen specimen in all states, with preview toggles EN/HI, font scale 1.0/1.3, motion on/off (layout = Doodle Kit S8 board).
 - RULE (once built): a widget is not "done" until its Doodle Kit entry exists.
 

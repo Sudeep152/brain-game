@@ -68,7 +68,7 @@ import androidx.compose.ui.unit.IntOffset
 @Composable
 fun PuzzleSwitch(checked: Boolean, modifier: Modifier = Modifier, enabled: Boolean = true) {
     val reduceMotion = LocalReduceMotion.current
-    val knobTravel = Sizes.SwitchWidth - Sizes.SwitchKnob - 2 * (Sizes.SwitchInset + Sizes.OutlineUi)
+    val knobTravel = Sizes.SwitchWidth - Sizes.SwitchKnob - (Sizes.SwitchInset + Sizes.OutlineUi) * 2
     val offset by animateDpAsState(
         targetValue = if (checked) knobTravel else 0.dp,
         animationSpec = if (reduceMotion) snap() else tween(Motion.PressMs * 2),

@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "project-puzzle"
 include(":app")
 include(":puzzle-core")
+include(":designsystem")
+include(":catalog")

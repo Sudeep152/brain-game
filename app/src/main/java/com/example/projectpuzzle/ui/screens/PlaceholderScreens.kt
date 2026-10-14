@@ -35,24 +35,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.projectpuzzle.R
-import com.example.projectpuzzle.ui.design.HintButton
-import com.example.projectpuzzle.ui.design.IconPressableButton
-import com.example.projectpuzzle.ui.design.InkCard
-import com.example.projectpuzzle.ui.design.InkProgressBar
-import com.example.projectpuzzle.ui.design.LabelText
-import com.example.projectpuzzle.ui.design.PressableButton
-import com.example.projectpuzzle.ui.design.ProjectPuzzleTheme
-import com.example.projectpuzzle.ui.design.PuzzleButtonStyle
-import com.example.projectpuzzle.ui.design.PuzzleColors
-import com.example.projectpuzzle.ui.design.PuzzleIcons
-import com.example.projectpuzzle.ui.design.PuzzleTheme
-import com.example.projectpuzzle.ui.design.Radii
-import com.example.projectpuzzle.ui.design.ScreenLayout
-import com.example.projectpuzzle.ui.design.Sizes
-import com.example.projectpuzzle.ui.design.Spacing
-import com.example.projectpuzzle.ui.design.TextLink
-import com.example.projectpuzzle.ui.design.TopBar
-import com.example.projectpuzzle.ui.design.dottedPaper
+import com.example.projectpuzzle.designsystem.HintButton
+import com.example.projectpuzzle.designsystem.IconPressableButton
+import com.example.projectpuzzle.designsystem.InkCard
+import com.example.projectpuzzle.designsystem.InkProgressBar
+import com.example.projectpuzzle.designsystem.LabelText
+import com.example.projectpuzzle.designsystem.PressableButton
+import com.example.projectpuzzle.designsystem.ProjectPuzzleTheme
+import com.example.projectpuzzle.designsystem.PuzzleButtonStyle
+import com.example.projectpuzzle.designsystem.PuzzleColors
+import com.example.projectpuzzle.designsystem.PuzzleIcons
+import com.example.projectpuzzle.designsystem.PuzzleTheme
+import com.example.projectpuzzle.designsystem.Radii
+import com.example.projectpuzzle.designsystem.ScreenLayout
+import com.example.projectpuzzle.designsystem.Sizes
+import com.example.projectpuzzle.designsystem.Spacing
+import com.example.projectpuzzle.designsystem.TextLink
+import com.example.projectpuzzle.designsystem.TopBar
+import com.example.projectpuzzle.designsystem.dottedPaper
 
 /** Placeholder data until real progress/levels exist (T-304+). */
 data class HomeUiState(

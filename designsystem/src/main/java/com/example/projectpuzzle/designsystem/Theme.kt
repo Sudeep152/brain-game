@@ -1,4 +1,4 @@
-package com.example.projectpuzzle.ui.design
+package com.example.projectpuzzle.designsystem
 
 import android.provider.Settings
 import androidx.compose.material3.LocalContentColor
@@ -12,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 
 val LocalPuzzleTypography = staticCompositionLocalOf { DefaultPuzzleTypography }
 
@@ -29,14 +31,26 @@ object PuzzleTheme {
 
 private val DevanagariLanguages = setOf("hi", "mr", "ne")
 
+/**
+ * App theme. The overrides exist for the Doodle Kit catalog (preview a language, font scale or
+ * "animations off" without changing phone settings); the game leaves them null.
+ */
 @Composable
-fun ProjectPuzzleTheme(content: @Composable () -> Unit) {
+fun ProjectPuzzleTheme(
+    languageOverride: String? = null,
+    fontScaleOverride: Float? = null,
+    reduceMotionOverride: Boolean? = null,
+    content: @Composable () -> Unit,
+) {
     val context = LocalContext.current
-    val language = LocalConfiguration.current.locales.get(0).language
+    val language = languageOverride ?: LocalConfiguration.current.locales.get(0).language
     val devanagari = language in DevanagariLanguages
-    val reduceMotion = remember(context) {
+    val systemReduceMotion = remember(context) {
         Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
     }
+    val reduceMotion = reduceMotionOverride ?: systemReduceMotion
+    val baseDensity = LocalDensity.current
+    val density = if (fontScaleOverride != null) Density(baseDensity.density, fontScaleOverride) else baseDensity
     val typography = if (devanagari) DefaultPuzzleTypography.withLineHeightScale(1.15f) else DefaultPuzzleTypography
 
     MaterialTheme(
@@ -55,6 +69,7 @@ fun ProjectPuzzleTheme(content: @Composable () -> Unit) {
         ),
     ) {
         CompositionLocalProvider(
+            LocalDensity provides density,
             LocalPuzzleTypography provides typography,
             LocalReduceMotion provides reduceMotion,
             LocalUppercaseLabels provides !devanagari,

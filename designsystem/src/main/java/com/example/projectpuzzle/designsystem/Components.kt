@@ -1,8 +1,13 @@
-package com.example.projectpuzzle.ui.design
+package com.example.projectpuzzle.designsystem
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
@@ -17,6 +22,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -25,6 +31,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -36,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -48,6 +56,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -120,10 +129,13 @@ fun PressableSurface(
     radius: Dp,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showPressed: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val source = remember { MutableInteractionSource() }
-    val pressed by source.collectIsPressedAsState()
+    val touched by source.collectIsPressedAsState()
+    // showPressed: freeze the pressed look for the Doodle Kit catalog and previews.
+    val pressed = (touched || showPressed) && enabled
     val reduceMotion = LocalReduceMotion.current
     val edge = Sizes.PressEdge
     val spec: AnimationSpec<Dp> = if (reduceMotion) {
@@ -138,6 +150,7 @@ fun PressableSurface(
     Box(
         modifier = modifier
             .height(height + edge)
+            .alpha(if (enabled) 1f else DisabledAlpha)
             .clickable(
                 interactionSource = source,
                 indication = null,
@@ -168,6 +181,9 @@ fun PressableSurface(
     }
 }
 
+/** Disabled controls: 45% opacity, no press motion (Doodle Kit C1). */
+const val DisabledAlpha = 0.45f
+
 enum class PuzzleButtonStyle { Primary, Secondary }
 
 /** Text button. Primary = red with white text; Secondary = white with ink text. Pass a width (e.g. fillMaxWidth). */
@@ -178,24 +194,73 @@ fun PressableButton(
     modifier: Modifier = Modifier,
     style: PuzzleButtonStyle = PuzzleButtonStyle.Primary,
     enabled: Boolean = true,
+    busy: Boolean = false,
+    leadingIcon: ImageVector? = null,
+    fill: Color? = null,
+    showPressed: Boolean = false,
 ) {
     val type = PuzzleTheme.type
     val primary = style == PuzzleButtonStyle.Primary
+    val contentColor = if (primary) PuzzleColors.OnRed else PuzzleColors.Ink
     PressableSurface(
         onClick = onClick,
-        fill = if (primary) PuzzleColors.Red else PuzzleColors.Surface,
+        showPressed = showPressed,
+        // fill: secondary actions may use sun (e.g. "Restart" in a confirm dialog, Doodle Kit C4).
+        fill = fill ?: if (primary) PuzzleColors.Red else PuzzleColors.Surface,
         height = if (primary) Sizes.ButtonHeight else Sizes.ButtonSmallHeight,
         radius = Radii.Button,
-        modifier = modifier,
-        enabled = enabled,
+        modifier = modifier.semantics { if (busy) stateDescription = text },
+        enabled = enabled && !busy,
     ) {
-        Text(
-            text = text,
-            style = if (primary) type.button else type.buttonSmall,
-            color = if (primary) PuzzleColors.OnRed else PuzzleColors.Ink,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = Spacing.L),
+        if (busy) {
+            BusyDots(color = contentColor)
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Spacing.S),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = Spacing.L),
+            ) {
+                if (leadingIcon != null) {
+                    Icon(imageVector = leadingIcon, contentDescription = null, tint = contentColor, modifier = Modifier.size(Sizes.IconGlyph))
+                }
+                Text(
+                    text = text,
+                    style = if (primary) type.button else type.buttonSmall,
+                    color = contentColor,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+    }
+}
+
+/** Three dots that pulse in turn while a button is busy (static when animations are off). */
+@Composable
+fun BusyDots(color: Color, modifier: Modifier = Modifier) {
+    val reduceMotion = LocalReduceMotion.current
+    val phase = if (reduceMotion) {
+        0f
+    } else {
+        val transition = rememberInfiniteTransition(label = "busy")
+        val value by transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 3f,
+            animationSpec = infiniteRepeatable(tween(durationMillis = 900), RepeatMode.Restart),
+            label = "busyPhase",
         )
+        value
+    }
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Spacing.S)) {
+        repeat(3) { index ->
+            val active = phase.toInt() == index
+            Box(
+                Modifier
+                    .size(Sizes.BusyDot)
+                    .alpha(if (active || reduceMotion) 1f else 0.4f)
+                    .clip(CircleShape)
+                    .background(color),
+            )
+        }
     }
 }
 
@@ -209,6 +274,9 @@ fun IconPressableButton(
     fill: Color = PuzzleColors.Surface,
     badgeCount: Int? = null,
     size: Dp = Sizes.IconButton,
+    enabled: Boolean = true,
+    showPressed: Boolean = false,
+    badge: (@Composable (Modifier) -> Unit)? = null,
 ) {
     Box(modifier = modifier) {
         PressableSurface(
@@ -216,48 +284,79 @@ fun IconPressableButton(
             fill = fill,
             height = size,
             radius = Radii.IconButton,
+            enabled = enabled,
+            showPressed = showPressed,
             modifier = Modifier
                 .width(size)
                 .semantics { this.contentDescription = contentDescription },
         ) {
             Icon(imageVector = icon, contentDescription = null, tint = PuzzleColors.Ink, modifier = Modifier.size(Sizes.IconGlyph))
         }
-        if (badgeCount != null) {
-            CountBadge(
-                count = badgeCount,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .offset(x = Spacing.S, y = -Spacing.S),
-            )
+        val badgeModifier = Modifier
+            .align(Alignment.TopEnd)
+            .offset(x = Spacing.S, y = -Spacing.S)
+        when {
+            badge != null -> badge(badgeModifier)
+            badgeCount != null -> CountBadge(count = badgeCount, modifier = badgeModifier)
         }
     }
 }
 
-/** Small ink badge with a number (decorative: the parent's content description must include the count). */
+/** Small ink badge (decorative: the parent's content description must say what it means). */
 @Composable
-fun CountBadge(count: Int, modifier: Modifier = Modifier) {
+fun Badge(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
     Box(
         modifier = modifier
-            .size(Sizes.Badge)
+            .requiredSize(Sizes.Badge)
             .clip(CircleShape)
             .background(PuzzleColors.Ink)
             .border(Sizes.BadgeBorder, PuzzleColors.Surface, CircleShape),
         contentAlignment = Alignment.Center,
-    ) {
-        Text(text = count.toString(), style = PuzzleTheme.type.label, color = PuzzleColors.Surface)
+        content = content,
+    )
+}
+
+/** Badge with a number (max 9 shown as "9+"). */
+@Composable
+fun CountBadge(count: Int, modifier: Modifier = Modifier) {
+    Badge(modifier) {
+        Text(text = if (count > 9) "9+" else count.toString(), style = PuzzleTheme.type.label, color = PuzzleColors.Surface)
     }
 }
 
-/** Sun-colored hint button with remaining count. */
+/** Badge with a small play triangle: "next one is a video". */
 @Composable
-fun HintButton(count: Int, contentDescription: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun VideoBadge(modifier: Modifier = Modifier) {
+    Badge(modifier) {
+        Icon(imageVector = PuzzleIcons.Play, contentDescription = null, tint = PuzzleColors.Surface, modifier = Modifier.size(Sizes.BadgeGlyph))
+    }
+}
+
+/**
+ * Sun hint button (Doodle Kit C1). [count] free hints left shows a number; when [videoNext] the badge
+ * shows a play triangle (next hint needs a video); with nothing left the button is disabled.
+ */
+@Composable
+fun HintButton(
+    count: Int,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    videoNext: Boolean = false,
+) {
+    val enabled = count > 0 || videoNext
     IconPressableButton(
         icon = PuzzleIcons.Hint,
         contentDescription = contentDescription,
         onClick = onClick,
         modifier = modifier,
         fill = PuzzleColors.Sun,
-        badgeCount = count,
+        enabled = enabled,
+        badge = when {
+            videoNext -> { m -> VideoBadge(m) }
+            count > 0 -> { m -> CountBadge(count, m) }
+            else -> null
+        },
     )
 }
 
@@ -285,7 +384,7 @@ fun TopBar(
     }
 }
 
-/** Ink-outlined progress bar with red fill. */
+/** Ink-outlined progress bar with red fill; a complete bar turns mint (Doodle Kit C2). */
 @Composable
 fun InkProgressBar(progress: Float, contentDescription: String, modifier: Modifier = Modifier) {
     val value = progress.coerceIn(0f, 1f)
@@ -306,7 +405,7 @@ fun InkProgressBar(progress: Float, contentDescription: String, modifier: Modifi
             Modifier
                 .fillMaxWidth(value)
                 .fillMaxHeight()
-                .background(PuzzleColors.Red),
+                .background(if (value >= 1f) PuzzleColors.Mint else PuzzleColors.Red),
         )
     }
 }
@@ -322,13 +421,18 @@ fun LabelText(text: String, modifier: Modifier = Modifier, color: Color = Puzzle
     )
 }
 
-/** Underlined text action with a 48 dp touch target. */
+/** Underlined text action with a 48 dp touch target; pressed = sun highlight (Doodle Kit C1). */
 @Composable
-fun TextLink(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun TextLink(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, showPressed: Boolean = false) {
+    val source = remember { MutableInteractionSource() }
+    val touched by source.collectIsPressedAsState()
+    val pressed = touched || showPressed
     Box(
         modifier = modifier
             .heightIn(min = Sizes.MinTouch)
-            .clickable(role = Role.Button, onClick = onClick),
+            .background(if (pressed) PuzzleColors.Sun else Color.Transparent, RoundedCornerShape(Radii.Highlight))
+            .clickable(interactionSource = source, indication = null, role = Role.Button, onClick = onClick)
+            .padding(horizontal = Spacing.XS),
         contentAlignment = Alignment.CenterStart,
     ) {
         Text(text = text, style = PuzzleTheme.type.link)

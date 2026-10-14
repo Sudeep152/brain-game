@@ -42,6 +42,8 @@ Role cards for specialist hats (research, game design, Android, QA, …): `agent
 - Repo: local folder `brain-game` + GitHub `Sudeep152/brain-game` (private). `main` must always build and pass tests.
 - **Code work = one branch per task:** `task/T-xxx-short-name` from latest `main`. Small commits with clear messages (`T-301: add Gradle skeleton`).
 - When done: set task `IN_REVIEW`; Claude reviews the branch; after review it's merged into `main` (owner can veto). Owner pushes to GitHub (or the agent pushes if it has access).
+- After a merge, the task branch is deleted (local by the merging agent with `git branch -d`; remote by the owner with `git push origin --delete <branch>`). `main` is the only long-lived branch and always holds all finished work (owner rule, 2026-10-14).
+- Reviewer fixes: a reviewer may add a small, clearly labelled fix commit on the task branch during review (e.g. d8c7eee in T-303) and must say so in the review note.
 - Docs/management-only updates by Claude may be committed directly on `main` if no code files are touched.
 - Before starting: `git status` must be clean and you must be on the right branch. Never commit on someone else's task branch.
 - Never force-push, rebase shared branches, reset, or delete others' work. Never commit secrets.

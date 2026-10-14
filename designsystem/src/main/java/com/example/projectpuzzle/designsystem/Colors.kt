@@ -1,4 +1,4 @@
-package com.example.projectpuzzle.ui.design
+package com.example.projectpuzzle.designsystem
 
 import androidx.compose.ui.graphics.Color
 
@@ -16,6 +16,12 @@ object PuzzleColors {
     val Sun = Color(0xFFFFC93C)
     val Mint = Color(0xFF3DD6A3)
     val Sky = Color(0xFF6EC3FF)
+
+    /** Matchsticks ONLY (D-021). Never for UI. */
+    val Wood = Color(0xFFE8B66A)
+
+    /** Scrim behind sheets and dialogs: ink at 40%. */
+    val Scrim = Color(0x661F1B16)
 
     /** Text on [Red]; only for bold text >= 18.7 sp (contrast 3.7:1). */
     val OnRed = Color(0xFFFFFFFF)

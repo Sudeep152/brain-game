@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paper">#FBF6EC</color>
+    <color name="sky">#6EC3FF</color>
+    <style name="Theme.DoodleKit" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/paper</item>
+    </style>
+</resources>

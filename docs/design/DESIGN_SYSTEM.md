@@ -1,8 +1,8 @@
 # Design System v1 — "Marker Doodle" (direction D)
 
 Date: 2026-10-14 · Approved direction: **D · Marker Doodle** (owner, decision D-019)
-Mockups: https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn (rows D: Home + Puzzle)
-**Rule for every agent:** use only these tokens (code: `app/.../ui/design/`). New color, font size, radius or motion? Propose it here first.
+Mockups: https://claude.ai/artifact/PKkC31ojwPZiqzXtJMoyPn (rows D: Home + Puzzle) · **Doodle Kit canvas** (every component, game piece, screen): https://claude.ai/artifact/U17w2oyqASxLS6bPJryut1
+**Rule for every agent:** use only these tokens (code: module `:designsystem`, package `com.example.projectpuzzle.designsystem`; see every part live in the **Doodle Kit** app, module `:catalog`). New color, font size, radius or motion? Propose it here first.
 **Parity rule:** this doc = the mockup = the code. Any visible difference between mockup and app screenshot is a bug — fix the code, or (if the mockup used an off-token value) fix the mockup, never leave them different. Every design review compares a real device screenshot side by side with the mockup.
 
 ## 1. The idea in one line
@@ -28,6 +28,8 @@ No gradients, no blur shadows, no glass, no emoji in UI.
 | `sun` | #FFC93C | hero card fill, hint button, highlights (ink text only) |
 | `mint` | #3DD6A3 | daily puzzle, success / "yes" (ink text only) |
 | `sky` | #6EC3FF | settings, info, ice/water objects (ink text only) |
+| `wood` | #E8B66A | matchsticks ONLY (D-021) |
+| `scrim` | `ink` at 40% | behind sheets and dialogs |
 Rules: max 3 fill colors per screen besides paper/surface/ink. Meaning is never color-only (always shape, icon or text too). Puzzle levels may only use these + `ink`.
 
 ## 4. Typography
@@ -46,21 +48,40 @@ Fonts (both SIL OFL, both include Devanagari for Hindi) — **bundle in `res/fon
 | `meta` | Baloo 2 700 | 15 / 1.2 | Chapter line, progress numbers, small stat captions ("day streak") — never uppercased |
 | `label` | Baloo 2 700 | 13 / 1.2, +1 tracking, UPPERCASE (Latin only) | Category tags only (e.g. "DAILY PUZZLE") |
 | `link` | Baloo 2 700 | 16 / 1.25, underlined | Text actions (48 dp touch area) |
-| `caption` | Baloo 2 500 | 13 / 1.3 | Hint/ad note |
+| `caption` | Baloo 2 500 | 13 / 1.3, color `inkSoft` | Hint/ad note |
+| `levelNumber` | Kalam 700 | 30 / 32 | Level tiles |
+| `segment` | Baloo 2 700 | 17 / 20 | Segmented control options |
+| `codeDigit` | Kalam 700 | 34 / 38 | Code input boxes |
+| `tokenNumber` | Kalam 700 | 40 / 44 | Game piece: tappable number token |
+| `tokenWord` | Kalam 700 | 28 / 32 | Game piece: draggable word token |
+| `stamp` | Kalam 700 | 26 / 28 | "DONE!" chapter stamp, letter slots |
+| `bubble` | Baloo 2 800 | 18 / 22 | Feedback bubble ("Not quite!") |
 Hindi: no uppercase transform; line height × 1.15 for Devanagari; check that long Hindi strings wrap, never shrink below 13 sp. Respect system font scale up to 1.3×.
 
 ## 5. Spacing, size, shape
 - Grid: 4 dp. Scale: 4 · 8 · 12 · 16 · 20 · 24 · 32.
 - Screen padding: 22 dp horizontal, 20 dp top, 28 dp bottom. Section gap: 20 dp.
 - Touch targets: **≥ 48 dp** (icon buttons 48×48). In puzzle scenes (1000-unit wide virtual canvas ≈ 390 dp) tappables must be **≥ 124 units** — add to validator later.
-- Radii: chip 11 · icon button 16 · button 18 · small card 20 · card 26 · puzzle board 26.
+- Radii: chip 11 · icon button 16 · button 18 · small card 20 · card 26 · puzzle board 26 · sticky note 4 · link pressed highlight 6.
 - Card padding: hero card 24 top / 20 sides / 24 bottom, gap 12 · small cards 16, gap 4. Off-register fill shift = 6 dp on every card (fill same size as outline).
 - Icon buttons 48×48; when sitting next to a secondary button they are 58×58 to match its height. Every pressable has the 5 dp ink edge.
 - Count badge: 22 dp circle, `ink` fill, 2 dp white border, white 13 sp bold number (white-on-red failed contrast).
-- Primary button height 60 dp; secondary 58 dp. Icon glyph 22 dp. Progress bar 20 dp. Streak card 116 dp wide.
+- Primary button height 60 dp; secondary 58 dp. Icon glyph 22 dp (setting-row icons 24). Progress bar 20 dp. Streak card 116 dp wide.
+- Game pieces: level tile 72 · number token 84 · odd-one-out tile 64 (art 40) · device cue tile 120 (art 90) · matchstick 60×110 · solved badge 160 (tick 80) · stamp 120 (5 dp red ring) · loader pieces 32, hop 12, 14 apart.
+- Every other size lives in `Sizes` (DesignTokens.kt); the Doodle Kit app shows them.
 
-## 6. Components (build once, reuse)
-`InkCard` (outline + off-register fill, color param) · `PressableButton` (primary red / secondary white / icon) · `HintButton` (sun + count badge) · `TopBar` (back · title · hint) · `ProgressBar` (ink outline, red fill) · `DottedPaper` background · `Badge`.
+## 6. Components (build once, reuse) — all in `:designsystem`, all shown in Doodle Kit
+| Group (canvas board) | Components |
+|---|---|
+| Foundations (F1, F2) | `PuzzleColors`, `PuzzleTypography` / `PuzzleTheme.type`, `Spacing`, `ScreenLayout`, `Radii`, `Sizes`, `Motion`, `PuzzleIcons` (25), `Modifier.dottedPaper()`, `ProjectPuzzleTheme(languageOverride, fontScaleOverride, reduceMotionOverride)` |
+| Buttons & links (C1) | `PressableSurface`, `PressableButton` (primary / secondary, busy, leading icon, fill), `IconPressableButton` (48 / 58), `HintButton` (count · video next · used up), `TextLink`, `Badge` / `CountBadge` / `VideoBadge` |
+| Cards, bars, status (C2) | `InkCard`, `TopBar`, `InkProgressBar` (mint when complete), `InkChip`, `LevelTile` (solved · current · unlocked · locked), `StatCard` |
+| Inputs & controls (C3) | `PuzzleSwitch`, `SettingRow`, `SettingGroup`, `RowDivider`, `SegmentedControl`, `InkSlider` (optional), `InkTextField` (focused · error), `InkCheckboxRow`, `InkRadioRow`, `AnswerOption` (normal · selected · correct · wrong), `CodeInput` (digits / letter slots) |
+| Feedback & overlays (C4) | `FeedbackBubble` (nope · close · yes), `InkSheet`, `Scrim`, `StickyNote`, `HintSheet`, `InkDialogCard`, `RewardedPrompt`, `StatusBanner`, `StepDots`, `DoodleLoader`, `EmptyState`, `CaptionText` |
+| Puzzle objects (G1) | `DoodleArt` + `Doodles` (primitives, 8 objects), `PuzzleObject` (7 states), `Matchstick` (idle · lifted · slot), `NumberToken`, `WordToken`, `OddOneTile` |
+| Device & sensor (G2) | `DeviceCueTile` + 8 cue doodles, `SensorFallbackCard`, sound cue = `InkChip` / `StatusBanner`, `PermissionPrimer` (LATER) |
+| Celebration (G3) | `SolvedBadge`, `SolvedBurst`, `ChapterCompleteCard`, `StreakCard`, `StickerBadge` (LATER) |
+Rule: a widget is not "done" until its Doodle Kit entry exists (D-020). Pressed states can be frozen for review with `showPressed = true`.
 
 ## 7. Motion (feel: bouncy, quick, hand-made)
 | Moment | Motion | Haptic |
@@ -81,8 +102,11 @@ Stroke icons, 24 grid, 2.4 dp stroke, round caps/joins, `ink`. No filled emoji-s
 - One idea per object; max 6 interactive objects per scene in MVP.
 - Draggable objects show lift; tappable objects react on press (squash 0.95).
 
-## 10. Screens still to design in this style (before building them)
-Solved screen · Hint sheet · Settings · Level list · Daily result + share card. (Home + Puzzle are in the mockups.)
+## 10. Screens
+Designed on the Doodle Kit canvas: S1 levels · S2 solved · S3 hint sheet · S4 settings · S5 daily result + share card · S6 first launch · S7 loading & offline · S8 Doodle Kit home. Sample versions built from components are in the Doodle Kit app → "Full screens". Home + Puzzle are in the first mockups (built in `:app`).
+
+## 12. Doodle Kit app (`:catalog`)
+Debug-only app (applicationId `com.example.projectpuzzle.catalog`, never uploaded to Play). Home = canvas S8: preview toggles EN / हिं, font 1.0× / 1.3×, motion on / off, then one page per canvas board. Run configuration "catalog" in Android Studio. Review = open a page next to the same canvas board; any difference is a bug.
 
 ## 11. Not in v1
 Dark mode (tokens are named so it can be added) · mascot/character (possible later, needs owner approval) · sticker-collection rewards (idea from direction E, later).

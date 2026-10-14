@@ -42,6 +42,7 @@ kotlin {
 
 dependencies {
     implementation(project(":puzzle-core"))
+    implementation(project(":designsystem"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

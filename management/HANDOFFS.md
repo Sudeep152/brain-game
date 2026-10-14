@@ -17,6 +17,19 @@ NEXT ACTION:
 ```
 
 ---
+TASK ID: T-303
+CURRENT OWNER: Codex
+NEXT OWNER: Claude (review) → Owner (merge approval)
+OBJECTIVE: Finish skeleton dependency, saveable navigation, brand, portrait, and daemon-JVM follow-ups.
+CURRENT STATUS: IN_REVIEW on task/T-303-skeleton-followups; implementation and verification complete.
+FILES MODIFIED: gradle/libs.versions.toml; app AndroidManifest.xml; app ui/navigation/ProjectPuzzleNavigation.kt; app ui/design/Brand.kt; management/TASKS.md; management/STATUS.md; management/HANDOFFS.md.
+DECISIONS MADE: Deleted the untracked generated daemon-JVM file because its JDK 25 pin conflicted with the agreed JDK 21 toolchain; no new project decision. No new widget, so no :designsystem/catalog change.
+TESTS RUN: app + catalog assemble and puzzle-core test BUILD SUCCESSFUL in 33s; puzzle-core forced rerun BUILD SUCCESSFUL in 1s; resolved runtime selected-prerelease scan = 0.
+KNOWN ISSUES: Gradle reports existing deprecation warnings for eventual Gradle 10 compatibility; not introduced or scoped to T-303. Runtime device interaction was not performed to avoid changing the owner's connected phone state.
+REMAINING WORK: Claude reviews the branch; owner approves merge.
+NEXT ACTION: Review T-303 diff and evidence, then merge if accepted.
+
+---
 TASK ID: T-307 (design system in code)
 CURRENT OWNER: Claude
 NEXT OWNER: Codex (verifier) → Owner (approve) → merge

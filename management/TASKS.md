@@ -122,7 +122,7 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - REVIEW (Claude, 2026-10-14): **APPROVED & merged.** Matches LEVEL_SCHEMA r2 closely: strict parsing (`ignoreUnknownKeys=false`, `type` discriminator), pure deterministic reducer, rule order/once/snapBack/dropOn/dragOut per §6, timers via effects, issue codes with paths, bundled levels replayed in tests. Follow-ups (non-blocking) → T-306.
 
 ### T-303 · Skeleton follow-ups (from T-301 review)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-303-skeleton-followups (small; before or after T-302)
+- ASSIGNED TO: Codex · STATUS: IN_REVIEW · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-303-skeleton-followups (from main at 97b9db7)
 - DESCRIPTION:
   1. Navigation3 → **1.2.0**. The official release page lists 1.2.0 as stable since 2026-09-23 (rc01 was 09-09). If Gradle can't resolve 1.2.0 from Google Maven, stop and report the exact error instead.
   2. Bump to latest stable: lifecycle 2.11.0, core-ktx 1.19.1 (check others the same way).
@@ -133,6 +133,17 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - FILES OWNED: gradle/libs.versions.toml, app/src/main/AndroidManifest.xml, app/src/main/java/**/ui/navigation/**, app/src/main/java/**/ui/design/Brand.kt
 - ACCEPTANCE: assembleDebug + tests pass (real output); no alpha/beta/rc.
 - REVIEWER: Claude
+- FILES TOUCHED: gradle/libs.versions.toml, app/src/main/AndroidManifest.xml, app/src/main/java/com/example/projectpuzzle/ui/navigation/ProjectPuzzleNavigation.kt, app/src/main/java/com/example/projectpuzzle/ui/design/Brand.kt, management/{TASKS,STATUS,HANDOFFS}.md
+- EVIDENCE (Codex, 2026-10-14): `ANDROID_HOME=/Users/shashank/Library/Android/sdk ./gradlew :app:assembleDebug :catalog:assembleDebug :puzzle-core:test`
+  ```text
+  > Task :catalog:assembleDebug
+  > Task :app:assembleDebug
+  BUILD SUCCESSFUL in 33s
+  100 actionable tasks: 95 executed, 3 from cache, 2 up-to-date
+  Configuration cache entry stored.
+  ```
+  Forced test execution: `./gradlew :puzzle-core:test --rerun-tasks` → `BUILD SUCCESSFUL in 1s`; 4 actionable tasks executed. Resolved `debugRuntimeClasspath` selected-version scan: `selected_prerelease_matches=0` (two old Compose RC requests were upgraded by dependency resolution to stable Compose 1.12.1, not selected). Official Maven metadata audit found AGP 9.4.1 as the only additional stable bump; other direct catalog versions were already latest stable.
+- NOTES: Navigation3 1.2.0 resolved successfully; routes are `@Serializable NavKey`s in `rememberNavBackStack`. Home remains the root, so `NavDisplay` does not consume Back there and Android exits the activity. `Brand` now points to `R.string.app_name` instead of duplicating the literal. MainActivity is portrait-locked. Deleted the untracked generated `gradle/gradle-daemon-jvm.properties`: it pinned daemon JDK 25 and embedded Foojay download URLs, conflicting with the project's JDK 21 toolchain. No widget was added, so `:designsystem` and Doodle Kit pages were not changed.
 
 ### T-306 · puzzle-core review follow-ups (from T-302 review)
 - ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-306-core-followups

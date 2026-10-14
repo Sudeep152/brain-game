@@ -169,8 +169,8 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
 - APPROVED by owner 2026-10-14 05:07 ("everything looking fine"), incl. wood token + camera/mic as LATER (D-021).
 
 ### T-308 · :designsystem module + "Doodle Kit" catalog app + all components
-- ASSIGNED TO: Claude (owner's call 2026-10-14) · STATUS: IN_REVIEW (code at de4ccb0; awaiting owner build on device) · BRANCH: task/T-308-designsystem-catalog · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
+- ASSIGNED TO: Claude (owner's call 2026-10-14) · STATUS: COMPLETED (merged 6ed2830) · BRANCH: task/T-308-designsystem-catalog · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
 - DESCRIPTION: Move ui/design/** + fonts + licenses from :app into new Android library `:designsystem` (package com.example.projectpuzzle.designsystem). :app depends on it. New debug-only app module `:catalog` (applicationId com.example.projectpuzzle.catalog, label "Doodle Kit", never uploaded to Play) listing every foundation/component/game piece/screen specimen in all states, with preview toggles EN/HI, font scale 1.0/1.3, motion on/off (layout = Doodle Kit S8 board).
 - RULE (once built): a widget is not "done" until its Doodle Kit entry exists.
-- COMPLETION EVIDENCE: pending — owner Gradle sync + run of `app` and `catalog` (Doodle Kit) on Pixel 6a; side-by-side check vs canvas boards. Claude could not compile (Google Maven blocked).
+- COMPLETION EVIDENCE: owner built and ran it 2026-10-14 11:13 IST ("build is working properly") after one compile fix (5f51c17). Visual side-by-side vs canvas: ongoing, mismatches go in follow-up fixes.
 

@@ -144,44 +144,5 @@ Owner tasks: `ASSIGNED TO: OWNER` (OWNER_ASSIGNED). Claim a task before editing.
   ```
   Forced test execution: `./gradlew :puzzle-core:test --rerun-tasks` → `BUILD SUCCESSFUL in 1s`; 4 actionable tasks executed. Resolved `debugRuntimeClasspath` selected-version scan: `selected_prerelease_matches=0` (two old Compose RC requests were upgraded by dependency resolution to stable Compose 1.12.1, not selected). Official Maven metadata audit found AGP 9.4.1 as the only additional stable bump; other direct catalog versions were already latest stable.
 - NOTES: Navigation3 1.2.0 resolved successfully; routes are `@Serializable NavKey`s in `rememberNavBackStack`. Home remains the root, so `NavDisplay` does not consume Back there and Android exits the activity. `Brand` now points to `R.string.app_name` instead of duplicating the literal. MainActivity is portrait-locked. Deleted the untracked generated `gradle/gradle-daemon-jvm.properties`: it pinned daemon JDK 25 and embedded Foojay download URLs, conflicting with the project's JDK 21 toolchain. No widget was added, so `:designsystem` and Doodle Kit pages were not changed.
-
-### T-306 · puzzle-core review follow-ups (from T-302 review)
-- ASSIGNED TO: Codex · STATUS: ASSIGNED · PRIORITY: P1 · MILESTONE: M4 · BRANCH: task/T-306-core-followups
-- DESCRIPTION:
-  1. **Interactivity check (schema gap, LEVEL_SCHEMA r3 §3.1/§9):** validator issue `NOT_INTERACTIVE` when a `tap`/`longPress` trigger targets an object without `tappable: true`, or a `dragEnd`/`dragOut` trigger or `drag` solution step targets an object without `draggable: true`. Runtime: `LongPress` must require `tappable` like `Tap` (today it doesn't — inconsistent).
-  2. **Logs:** `PuzzleState.logs` grows forever and is part of state equality. Move ignored-input logs out of state (e.g. `SessionResult.log`) or cap them.
-  3. **Replay diagnostics:** when a solution step is ignored by the session, `SolutionReplayer` should return an error naming the step index + reason (helps level authors).
-  4. Emoji literal check uses a single code point; multi-code-point emoji (e.g. ❤️, 👍🏽) are rejected. Accept one grapheme instead, or document the limit.
-  5. Tests for each item.
-- FILES OWNED: puzzle-core/src/**
-- ACCEPTANCE: tests pass (real output); bundled levels still validate.
-- REVIEWER: Claude
-
-### T-307 · Design system in code (Marker Doodle)
-- ASSIGNED TO: Claude (implementation, owner's call 2026-10-14 while Codex was paused) · VERIFIER: Owner · STATUS: COMPLETED · PRIORITY: P0 · MILESTONE: M4 · BRANCH: task/T-307-design-system (merged to main)
-- OWNER CHECK (2026-10-14 04:33): owner built 167bbdf on device — compiled with no changes. Screenshots showed mockup/app differences (Baloo 2 rendered at weight 400, label/meta sizes, card padding/radius, missing doodles, back button, badge). Fixed in 96ddba0 (static Baloo 2 weights, `meta` style, parity rule in DESIGN_SYSTEM.md, mockup D synced). 96ddba0 not yet rebuilt.
-- ⚠ NOT COMPILED: Claude's environments cannot reach Google Maven / Gradle. Verifier must build, fix compile errors (small, note each fix), take screenshots, and review the code.
-- DONE BY CLAUDE: tokens (Colors.kt, Type.kt, DesignTokens.kt), Theme.kt (Devanagari line-height x1.15, reduce-motion, no uppercase for Hindi), Components.kt (dottedPaper, InkCard, PressableSurface/Button, IconPressableButton, CountBadge, HintButton, TopBar, InkProgressBar, LabelText, TextLink), PuzzleIcons.kt, fonts in res/font + OFL licenses, restyled Home/Play/Settings + EN/HI previews, strings EN/HI, colors.xml + windowBackground. Did not touch navigation or Brand.kt (T-303).
-- VERIFY (Codex): 1) `./gradlew :app:assembleDebug :puzzle-core:test` green (paste output). 2) Emulator screenshots Home + Play in EN and HI → docs/design/screens/. 3) Check: press animation, haptic, 48 dp targets, Hindi text not clipped, font scale 1.3. 4) Code review notes in this entry. Then IN_REVIEW → owner approves → merge.
-- DESCRIPTION: Implement docs/design/DESIGN_SYSTEM.md §3–8 in `app/.../ui/design/`: color tokens, typography (bundle Kalam Bold + Baloo 2 500/700/800 in res/font — both SIL OFL; add the license files under app/src/main/assets/licenses/), spacing/radii/sizes, motion specs as constants, and components `DottedPaper`, `InkCard` (off-register fill), `PressableButton` (primary/secondary/icon), `HintButton`, `TopBar`, `ProgressBar`. Restyle the existing placeholder Home/Play/Settings to use them (layout like mockup D-Home; no real data yet). Respect system font scale and animator scale = 0.
-- FILES OWNED: app/src/main/java/**/ui/design/**, app/src/main/java/**/ui/screens/**, app/src/main/res/font/**, app/src/main/assets/licenses/**
-- ACCEPTANCE: assembleDebug passes (real output); screenshots of Home in English AND Hindi on the emulator attached to the task (docs/design/screens/); no new colors/sizes outside the tokens; touch targets ≥ 48 dp.
-- REVIEWER: Claude (design review: visual consistency, interaction clarity, accessibility) + Owner
-
-### T-304 · PuzzleCanvas renderer + Play screen (hit-test, drag, effects)
-- ASSIGNED TO: Codex · STATUS: BACKLOG · MILESTONE: M4 · DEPENDS ON: T-302 ✅, T-202 ✅, T-307
-
-### T-305 · Matchstick family: solver, generator, ≥1-solution validation
-- ASSIGNED TO: Codex (design: Claude) · STATUS: BACKLOG · MILESTONE: M6 · DEPENDS ON: T-302
-
-### T-309 · Doodle Kit visuals — full component library (design)
-- ASSIGNED TO: Claude · STATUS: COMPLETED · REVIEWER: Owner (approval gate: visual)
-- EVIDENCE: canvas https://claude.ai/artifact/U17w2oyqASxLS6bPJryut1 — 4 pages: Foundations (colors+type EN/HI; space, shape, 20 icons, motion), Components (buttons, cards/bars/status, inputs/controls incl. text field, switch, segmented, checkbox/radio, quiz answer options, code input; feedback/overlays incl. hint sheet, dialog, rewarded prompt, banner/loader/empty/error), Game pieces (shape primitives, 8 objects, 7 interaction states, tokens, matchstick, odd-one-out tile; 8 device cues + sensor fallback + sound cues + camera/mic primer marked LATER; celebration), Screens (level map, solved, hint sheet, settings, daily+share card, first launch, offline video state, Doodle Kit app home).
-- APPROVED by owner 2026-10-14 05:07 ("everything looking fine"), incl. wood token + camera/mic as LATER (D-021).
-
-### T-308 · :designsystem module + "Doodle Kit" catalog app + all components
-- ASSIGNED TO: Claude (owner's call 2026-10-14) · STATUS: COMPLETED (merged 6ed2830) · BRANCH: task/T-308-designsystem-catalog · DEPENDS ON: T-307 merged, T-309 approved · MILESTONE: M4
-- DESCRIPTION: Move ui/design/** + fonts + licenses from :app into new Android library `:designsystem` (package com.example.projectpuzzle.designsystem). :app depends on it. New debug-only app module `:catalog` (applicationId com.example.projectpuzzle.catalog, label "Doodle Kit", never uploaded to Play) listing every foundation/component/game piece/screen specimen in all states, with preview toggles EN/HI, font scale 1.0/1.3, motion on/off (layout = Doodle Kit S8 board).
-- RULE (once built): a widget is not "done" until its Doodle Kit entry exists.
-- COMPLETION EVIDENCE: owner built and ran it 2026-10-14 11:13 IST ("build is working properly") after one compile fix (5f51c17). Visual side-by-side vs canvas: ongoing, mismatches go in follow-up fixes.
-
+- REVIEW (Claude, 2026-10-14): **CHANGES MADE IN REVIEW → approve after owner device check.** Versions, Brand, portrait, daemon-file deletion: OK (agree the JDK 25 pin conflicted with our JDK 21 toolchain). Blocker found and fixed by Claude (commit on this branch): `:app` did not apply the kotlinx-serialization plugin, so the `@Serializable` NavKeys got no generated serializer; `rememberNavBackStack` serializes the back stack when the activity saves state → crash on backgrounding / process death. Build passes either way, so only a device check catches it. Nit (no change): `const val AppNameRes = R.string.app_name` relies on R ids being compile-time constants; if a later AGP makes them non-final, use `val`.
+- OWNER CHECK BEFORE MERGE: Developer options → "Don't keep activities" ON; open app → Play → press Home → reopen. Must come back on Play with no crash. Then turn the option OFF.

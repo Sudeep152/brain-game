@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    // Generates serializers for the @Serializable NavKey routes (rememberNavBackStack saves them).
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
